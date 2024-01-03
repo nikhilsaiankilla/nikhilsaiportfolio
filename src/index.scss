@@ -1,0 +1,28 @@
+:root {
+
+    // predefined colors 
+    --bg-color: #8B8276;
+    --light-color: #F4EDDF;
+    --secondary-color: #0E0F10;
+    --third-color: #DCDCDB;
+    --white-color: #ffffff;
+    --grey-color: grey;
+
+    //predefind font sizes
+    --sm-size: 1rem;
+    --subHeading : 2.074rem;
+    --heading-text : 2.986rem;
+
+    //predefind font styles
+    --thin-text : 400;
+    --semibold-text : 600;
+    --bold-text:800;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    font-family: 'Roboto', sans-serif;
+}
