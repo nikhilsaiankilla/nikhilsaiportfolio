@@ -1,28 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 :root {
-
-    // predefined colors 
-    --bg-color: #8B8276;
-    --light-color: #F4EDDF;
-    --secondary-color: #0E0F10;
-    --third-color: #DCDCDB;
-    --white-color: #ffffff;
-    --grey-color: grey;
-
     //predefind font sizes
     --sm-size: 1rem;
-    --subHeading : 2.074rem;
-    --heading-text : 2.986rem;
+    --subHeading: 2.074rem;
+    --heading-text: 2.986rem;
 
     //predefind font styles
-    --thin-text : 400;
-    --semibold-text : 600;
-    --bold-text:800;
+    --thin-text: 400;
+    --semibold-text: 600;
+    --bold-text: 800;
+
+    //predefind fonts styles
+    --hero-font: 'Anton', sans-serif;
+    --primary-font: 'Roboto', sans-serif;
+
+    //predefind colors
+    --bg-color: #0E0F10;
+    --primary-color: #ffffff;
+    --secondary-color: #333333;
 }
 
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     overflow-x: hidden;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--primary-font);
+}
+
+body{
+    background-color: var(--bg-color);
 }

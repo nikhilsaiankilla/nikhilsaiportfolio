@@ -9,11 +9,13 @@ import Navbar from "./components/navbar/Navbar";
 import FooterSection from "./sections/footerSection/FooterSection";
 
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+import NavSlider from "./components/navbar/navSlider/NavSlider";
 
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar/>
+      <NavSlider/>
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/blog/:blogId" element={<Blog />} />
