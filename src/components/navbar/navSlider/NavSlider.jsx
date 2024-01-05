@@ -1,11 +1,12 @@
 //Importing Styles
-import Navbar from '../Navbar'
+import { useSelector } from 'react-redux'
 import './../style.scss'
 
 const NavSlider = () => {
+  const { value } = useSelector(state => state.navSlider)
   return (
-    <div className={`nav-slider`}>
-      <Navbar />
+    <div className={`nav-slider ${value ? ' ' : 'open'}`}>
+       
     </div>
   )
 }
