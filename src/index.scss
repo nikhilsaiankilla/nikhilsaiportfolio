@@ -3,8 +3,8 @@
 
 :root {
     //predefind font sizes
-    --sm-size: 1rem;
-    --subHeading: 2.074rem;
+    --sm-text: 1rem;
+    --subHeading-text: 2.074rem;
     --heading-text: 2.986rem;
 
     //predefind font styles
@@ -28,8 +28,13 @@
     box-sizing: border-box;
     overflow-x: hidden;
     font-family: var(--primary-font);
+    // border: 1px solid red;
 }
 
 body{
     background-color: var(--bg-color);
+}
+
+body::-webkit-scrollbar{
+    display: none;
 }

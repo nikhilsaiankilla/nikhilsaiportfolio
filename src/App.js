@@ -17,7 +17,7 @@ function App() {
       <Navbar/>
       <NavSlider/>
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/blog/:blogId" element={<Blog />} />
         <Route path="/project/:projectId" element={<Project />} />
         <Route path="*" element={<Error />} />
