@@ -3,7 +3,7 @@
 
 :root {
     //predefind font sizes
-    --sm-text: 1rem;
+    --sm-text: 1.2rem;
     --subHeading-text: 2.074rem;
     --heading-text: 2.986rem;
 
@@ -28,11 +28,11 @@
     box-sizing: border-box;
     overflow-x: hidden;
     font-family: var(--primary-font);
-    // border: 1px solid red;
 }
 
 body{
-    background-color: var(--bg-color);
+    background-color: var(--bg-color); // first bg color 
+    // background: linear-gradient(to right, #0072ff, #00c6ff);
 }
 
 body::-webkit-scrollbar{

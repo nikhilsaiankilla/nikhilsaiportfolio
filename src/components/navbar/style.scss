@@ -5,7 +5,10 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem 5rem;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 3;
 
     .logo {
@@ -18,6 +21,7 @@
     .btn {
         width: 50px;
         cursor: pointer;
+        overflow: hidden;
 
         span {
             display: block;
@@ -171,6 +175,7 @@
     top: 0;
     left: 0;
     transition: all 0.5s ease-in;
+    z-index: 1;
 
     &.open {
         top: -100%;

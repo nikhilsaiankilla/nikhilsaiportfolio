@@ -8,15 +8,22 @@ import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
+  const gridBox = [];
+  for (let index = 0; index < 100; index++) {
+    gridBox.push(<span className='grid-block' key={index}></span>)
+  }
   return (
     <div className='hero-section'>
+      <div className="grid-layout">
+        {gridBox.map(grid => grid)}
+      </div>
       <div className="text-container">
         <h4>Hey I'm your</h4>
         <h1>react developer</h1>
       </div>
-      <div className="icons">
-        <span className="line line-top"></span>
-        <div>
+      <div className="icon-container">
+        <span className="line"></span>
+        <div className='icons'>
           <Link to="https://github.com/nikhilsaiankilla" target="_blank" className='icon-link'>
             <FaGithub className='icon' />
           </Link>
@@ -27,7 +34,6 @@ const HeroSection = () => {
             <FaXTwitter className='icon' />
           </Link>
         </div>
-        {/* <span className="line line-bottom"></span> */}
       </div>
     </div>
   )

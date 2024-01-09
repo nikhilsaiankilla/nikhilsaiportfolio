@@ -2,7 +2,7 @@ import './style.scss'
 
 const ContactSection = () => {
   return (
-    <div>ContactSection</div>
+    <div className='contact-section'>ContactSection</div>
   )
 }
 

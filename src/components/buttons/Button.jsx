@@ -1,8 +1,10 @@
 import './style.scss'
 
-const Button = () => {
+import { Link } from 'react-router-dom'
+
+const Button = ({ title, link, className }) => {
   return (
-    <div>Button</div>
+    <Link className={`${className} btn`} >{title}</Link>
   )
 }
 
