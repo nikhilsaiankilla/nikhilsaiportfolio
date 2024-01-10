@@ -1,7 +1,10 @@
 .btn{
     display: block;
     text-decoration: none;
-    padding: 2rem 0.5rem;
-    border: 2px solid black;
+    padding: 10px 20px;
     border-radius: 10px;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    text-decoration: none;
+    text-transform: uppercase;
 }

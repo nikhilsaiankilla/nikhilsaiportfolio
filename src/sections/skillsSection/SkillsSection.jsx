@@ -68,7 +68,6 @@ const SkillsSection = () => {
     },
   ]
 
-  console.log(data);
   return (
     <div className='skills-section'>
       <PageTitle title='Skills' color="white" />
