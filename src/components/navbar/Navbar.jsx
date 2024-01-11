@@ -27,7 +27,7 @@ const Navbar = (props) => {
   return (
     <nav className="navbar" >
       <img src={logo} alt="logo" className='logo' onClick={() => { navigate('/') }} />
-      <div className={`btn ${value ? 'active' : 'not-active'}`} onClick={handleSlider}>
+      <div className={`nav-btn ${value ? 'active' : 'not-active'}`} onClick={handleSlider}>
         <span></span>
         <span></span>
         <span></span>
