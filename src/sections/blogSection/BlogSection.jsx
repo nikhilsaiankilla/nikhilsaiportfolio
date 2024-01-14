@@ -2,7 +2,7 @@ import './style.scss'
 
 const BlogSection = () => {
   return (
-    <div>BlogSection</div>
+    <div id='BlogSection'>BlogSection</div>
   )
 }
 

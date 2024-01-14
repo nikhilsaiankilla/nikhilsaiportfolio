@@ -13,7 +13,7 @@ const HeroSection = () => {
     gridBox.push(<span className='grid-block' key={index}></span>)
   }
   return (
-    <div className='hero-section'>
+    <div className='hero-section' id='HeroSection'>
       <div className="grid-layout">
         {gridBox.map(grid => grid)}
       </div>

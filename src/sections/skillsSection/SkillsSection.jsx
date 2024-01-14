@@ -69,7 +69,7 @@ const SkillsSection = () => {
   ]
 
   return (
-    <div className='skills-section'>
+    <div className='skills-section' id='SkillsSection'>
       <PageTitle title='Skills' color="white" />
       <div className="skills-container">
         {

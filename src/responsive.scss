@@ -1,0 +1,32 @@
+// Define breakpoints for small screens (mobiles, laptops, tablets)
+$small-screen: 600px;
+$medium-screen: 768px;
+$large-screen: 1024px;
+
+// Media query for small screens
+@mixin small-screen {
+    @media (max-width: $small-screen) {
+        @content;
+    }
+}
+
+// Media query for medium screens
+@mixin medium-screen {
+    @media (max-width: $medium-screen) {
+        @content;
+    }
+}
+
+// Media query for large screens (tablets)
+@mixin large-tablet {
+    @media (min-width: $medium-screen) and (max-width: $large-screen) {
+        @content;
+    }
+}
+
+// Media query for large screens
+@mixin large-screen {
+    @media (min-width: $large-screen) {
+        @content;
+    }
+}

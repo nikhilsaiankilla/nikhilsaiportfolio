@@ -7,7 +7,7 @@ const Img = ({ src }) => {
             <LazyLoadImage
                 alt={src}
                 effect='blur'
-                height='100%'
+                height='99%'
                 src={src} // use normal <img> attributes as props
                 width="100%" />
         </div>

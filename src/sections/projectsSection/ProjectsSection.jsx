@@ -87,7 +87,7 @@ const ProjectsSection = () => {
     setActiveSlide(index);
   }
   return (
-    <div className='project-section'>
+    <div className='project-section' id='ProjectsSection'>
       <PageTitle title="Projects" color='white' />
       <div className="projects-container">
         <div className="slider-controllers">

@@ -29,7 +29,7 @@ const AboutSection = () => {
     );
   }
   return (
-    <div className='about-section'>
+    <div className='about-section' id='AboutSection'>
       <div className="main-container">
         <div className="blocks-container">
           {blocks}

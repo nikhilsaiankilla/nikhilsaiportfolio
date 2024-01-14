@@ -3,7 +3,8 @@ import './style.scss'
 // Importing the conponents 
 
 //Importing images
-import logo from '../../assests/logo/n.png'
+import WhiteLogo from '../../assests/logo/WhiteLogo.png'
+import BlackLogo from '../../assests/logo/BlackLogo.png'
 
 //Importing Hooks
 import { useNavigate } from 'react-router-dom'
@@ -26,7 +27,8 @@ const Navbar = (props) => {
 
   return (
     <nav className="navbar" >
-      <img src={logo} alt="logo" className='logo' onClick={() => { navigate('/') }} />
+      {value && <img src={BlackLogo} alt="logo" className='logo' onClick={() => { navigate('/') }} />}
+      {!value && <img src={WhiteLogo} alt="logo" className='logo' onClick={() => { navigate('/') }} />}
       <div className={`nav-btn ${value ? 'active' : 'not-active'}`} onClick={handleSlider}>
         <span></span>
         <span></span>
