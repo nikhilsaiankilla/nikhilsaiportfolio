@@ -1,13 +1,3 @@
-//Features Needed...!
-
-// Feature 1 : OnClick side button the carousrl should move respective side => Done
-
-// Feature 2 : The indicator should get highlight respective to the carouselItem => Done
-
-// Feature 3 : Indicator Should also work as a button => Done
-
-// Feature 4 : Implement Auto Carousel 
-
 import './style.scss'
 
 //Importing Components

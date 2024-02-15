@@ -46,14 +46,15 @@ const NavSlider = () => {
     <div className={`nav-slider ${value ? ' ' : 'open'}`}>
       <ul>
         {navLinks.map((link, index) => (
-          <li key={index}>
+          <li key={index}
+          >
             <ScrollLink
               to={link.section}
               smooth={true}
               duration={800}
               onClick={() => handleNavLinkClick(link.section)}
             >
-              {'< '}{link.name}{' />'}
+              {'<'} {link.name} {'/>'}
             </ScrollLink>
           </li>
         ))}

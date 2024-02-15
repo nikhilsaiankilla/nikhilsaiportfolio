@@ -22,7 +22,7 @@ function App() {
         <Route path="/project/:projectId" element={<Project />} />
         <Route path="*" element={<Error />} />
       </Routes>
-      <FooterSection />
+      {/* <FooterSection /> */}
     </BrowserRouter>
   );
 }

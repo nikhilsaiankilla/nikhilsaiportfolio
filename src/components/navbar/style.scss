@@ -1,15 +1,22 @@
+@import '../../responsive.scss';
+
 .navbar {
     width: 100%;
     height: 100px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 5rem;
+    padding: 1rem 2rem;
+    
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     z-index: 3;
+
+    @include large-screen{
+        padding: 1rem 5rem;
+    }
 
     .logo {
         width: 40px;
@@ -186,21 +193,32 @@
     ul {
         width: 100%;
         height: 100%;
-        padding: 0 5rem;
+        padding: 0 2rem;
         list-style: none;
 
         display: flex;
         justify-content: center;
         flex-direction: column;
 
+        @include large-screen{
+            padding: 1rem 5rem;
+        }
+
         li {
             width: 100%;
-            margin: 1rem 0;
-            font-size: 3rem;
-            font-weight: 800;
+            margin: 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 600;
+            padding: 0.3rem 0.5rem;
+            
             cursor: pointer;
             color: var(--bg-color);
             transition: all 0.5s ease;
+
+            @include large-screen{
+                font-size: 2.6rem;
+                margin: 1rem 0;
+            }
 
             &:hover{
                 background-color: black;

@@ -1,8 +1,9 @@
 import emailjs from '@emailjs/browser';
 import PageTitle from '../../components/pageTitle/PageTitle'
-import './style.scss'
 import { useRef } from 'react';
 import { useState } from 'react';
+
+import './style.scss'
 
 const ContactSection = () => {
   const form = useRef();
@@ -36,7 +37,21 @@ const ContactSection = () => {
       <form ref={form} onSubmit={(event) => {
         sendEmail(event)
       }}>
-        <label className='text'>I'm <span><input type="text" name='user_name' className='user_name' required /></span>. and I've got a mission for you.  My email is <span><input type="email" required name='user_email' className='user_email' /></span>. I've got this grand idea, and I need your coding superpowers to bring it to life. The quest? <span><input type="text" name="user_message" className='user_message' /></span>. Ready for the challenge?</label>
+        <label className='text'>
+          I'm
+          <span>
+            <input type="text" name='user_name' className='user_name' required />
+          </span>
+          . and I've got a mission for you.  My email is
+          <span>
+            <input type="email" required name='user_email' className='user_email' />
+          </span>
+          . I've got this grand idea, and I need your coding superpowers to bring it to life. The quest?
+          <span>
+            <input type="text" name="user_message" className='user_message' />
+          </span>
+          . Ready for the challenge?
+        </label>
         <button type='submit' className='submit-btn'>Send</button>
         {done && <p className='feedback'>thanks for contacting me</p>}
         {error && <p className='error'>Something went wrong please try again</p>}
