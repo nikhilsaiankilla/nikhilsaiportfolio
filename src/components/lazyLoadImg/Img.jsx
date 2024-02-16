@@ -8,7 +8,7 @@ const Img = ({ src }) => {
                 alt={src}
                 effect='blur'
                 height='99%'
-                src={src} // use normal <img> attributes as props
+                src={src}
                 width="100%" />
         </div>
     )

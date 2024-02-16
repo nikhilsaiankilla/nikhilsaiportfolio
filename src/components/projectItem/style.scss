@@ -1,3 +1,5 @@
+@import '../../responsive.scss';
+
 .project {
     width: 100vw;
     height: 100%;
@@ -5,22 +7,41 @@
     position: relative;
 
     .img-div {
-        width: 60%;
+        width: 80%;
         height: 70%;
         position: absolute;
-        top: 50%;
-        left: 0;
         overflow: hidden;
+        top: 10%;
+        left: 15%;
 
-        transform: translate(50%, -55%);
+        border-radius: 10px;
+
+        @include small-screen {
+            width: 80%;
+        }
+
+        @include medium-screen {
+            width: 80%;
+        }
+
+        @include medium-large-screen {
+            width: 60%;
+            top: 50%;
+            left: 0;
+            transform: translate(50%, -55%);
+        }
     }
 
     .project-info {
-        width: 35%;
-        height: 50%;
+        width: 40%;
+        height: 55%;
         background-color: var(--primary-color);
         border-radius: 20px;
-        padding: 2rem;
+        padding: 1rem;
+
+        @include medium-large-screen{
+            padding: 2rem;
+        }
 
         position: absolute;
         z-index: 1;
@@ -31,26 +52,81 @@
         justify-content: center;
         flex-direction: column;
 
+        opacity: 0;
+
+        @include medium-screen {
+            opacity: 1;
+        }
+
         transform: translate(25%, -55%);
 
         .project-number,
         .project-desc {
-            font-size: var(--sm-text);
+            width: 100%;
+            font-size: 0.8rem;
             color: var(--secondary-color);
-            margin-bottom: 0.7rem;
+            margin-bottom: 0.3rem;
+            
+            overflow: hidden;
+
+            @include medium-screen{
+                font-size: 1rem;
+            }
+
+            @include medium-large-screen{
+                font-size: 1.2rem;
+                line-height: 1.2;
+            }
         }
 
         .project-title {
             font-size: var(--subHeading-text);
             font-weight: var(--semibold-text);
             margin-bottom: 0.7rem;
+
+            overflow: hidden;
         }
 
         .project-desc {
             width: 90%;
         }
 
-        .buttons{
+        .buttons {
+            display: flex;
+            margin-top: 1rem;
+            gap: 30px;
+        }
+    }
+
+    .sm-project-desc {
+        background-color: white;
+        display: inline-block;
+        padding: 10px 14px;
+        border-radius: 10px;
+        
+        position: absolute;
+
+        top: 50%;
+        left: 0;
+
+        transform: translate(10%,-70%);
+
+        @include medium-screen{
+            opacity: 0;
+        }
+
+        .project-desc {
+            font-size: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .project-title {
+            margin-top: 0.7rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .buttons {
             display: flex;
             margin-top: 1rem;
             gap: 30px;

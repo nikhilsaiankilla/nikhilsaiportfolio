@@ -18,7 +18,14 @@ const ProjectItem = ({ project, index }) => {
                     <Button title="Code" className='btn' link={project?.liveLink} />
                 </div>
             </div>
-
+            <div className="sm-project-desc">
+                <h6 className="project-number">{'<'}Project {index + 1}{'/>'}</h6>
+                <h2 className="project-title">{project?.title}</h2>
+                <div className="buttons">
+                    <Button title="Demo" className='btn' link={project?.demoLink} />
+                    <Button title="Code" className='btn' link={project?.liveLink} />
+                </div>
+            </div>
         </div>
     )
 }
