@@ -39,6 +39,8 @@
         border-radius: 20px;
         padding: 1rem;
 
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.338);
+
         @include medium-large-screen{
             padding: 2rem;
         }
@@ -63,32 +65,34 @@
         .project-number,
         .project-desc {
             width: 100%;
-            font-size: 0.8rem;
+            font-size: 0.6rem;
             color: var(--secondary-color);
             margin-bottom: 0.3rem;
             
             overflow: hidden;
 
             @include medium-screen{
-                font-size: 1rem;
+                font-size: 0.7rem;
             }
 
             @include medium-large-screen{
                 font-size: 1.2rem;
-                line-height: 1.2;
+                line-height: 1;
             }
         }
 
         .project-title {
-            font-size: var(--subHeading-text);
+            font-size: 1.5rem;
             font-weight: var(--semibold-text);
-            margin-bottom: 0.7rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.3;
+            text-transform: capitalize;
 
             overflow: hidden;
         }
 
         .project-desc {
-            width: 90%;
+            width: 100%;
         }
 
         .buttons {
@@ -116,7 +120,7 @@
         }
 
         .project-desc {
-            font-size: 1rem;
+            font-size: 0.8rem;
             color: var(--secondary-color);
         }
 

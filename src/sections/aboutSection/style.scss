@@ -15,7 +15,7 @@
         position: relative;
 
         width: 90%;
-        height: 85vh;
+        height: 95vh;
         background-color: white;
         border-radius: 20px;
 
@@ -94,20 +94,20 @@
             gap: 1rem;
 
             p {
-                font-size: 1rem;
+                font-size: 0.8rem;
                 font-weight: 500;
                 text-transform: capitalize;
 
                 width: 100%;
 
                 @include medium-screen {
-                    font-size: 1.3rem;
+                    font-size: 1.1rem;
 
                     width: 70%;
                 }
 
                 @include medium-large-screen{
-                    font-size: 1.5rem;
+                    font-size: 1.3rem;
 
                     width: 80%;
                 }
