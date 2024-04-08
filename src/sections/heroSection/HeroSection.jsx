@@ -2,7 +2,8 @@ import './style.scss'
 
 //Importing Icons
 import { FaXTwitter } from "react-icons/fa6";
-import { FaGithub, FaLinkedinIn } from "react-icons/fa";
+import { FaGithub, FaLinkedinIn, FaFileDownload } from "react-icons/fa";
+import pdf from "./../../assests/resume/resume.pdf"
 
 //Importing Components
 import { Link } from 'react-router-dom';
@@ -20,6 +21,7 @@ const HeroSection = () => {
       <div className="text-container">
         <h4>Hey I'm your</h4>
         <h1>react developer</h1>
+        <a href={pdf} download className='download-pdf'>Download Resume <FaFileDownload /></a>
       </div>
       <div className="icon-container">
         <span className="line"></span>

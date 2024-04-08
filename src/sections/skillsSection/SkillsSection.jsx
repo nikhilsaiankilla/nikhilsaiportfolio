@@ -11,7 +11,7 @@ import ReactIcon from '../../assests/react.webp'
 import GsapIcon from '../../assests/gsap.webp'
 import ReduxIcon from '../../assests/redux.webp'
 import GitIcon from '../../assests/git.webp'
-import GithubIcon from '../../assests/github.webp'
+import GithubIcon from '../../assests/github.png'
 
 const SkillsSection = () => {
 
