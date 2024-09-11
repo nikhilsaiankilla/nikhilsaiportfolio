@@ -20,7 +20,7 @@ const HeroSection = () => {
       </div>
       <div className="text-container">
         <h4>Hey I'm your</h4>
-        <h1>react developer</h1>
+        <h1>Full Stack developer</h1>
         <a href={pdf} download className='download-pdf'>Download Resume <FaFileDownload /></a>
       </div>
       <div className="icon-container">
