@@ -12,60 +12,84 @@ import GsapIcon from '../../assests/gsap.webp'
 import ReduxIcon from '../../assests/redux.webp'
 import GitIcon from '../../assests/git.webp'
 import GithubIcon from '../../assests/github.png'
+import NodeJsIcon from '../../assests/nodeJs.webp'
+import ExpressJsIcon from '../../assests/expressJs.webp'
+import mySqlIcon from '../../assests/mySql.webp'
+import RestApiIcon from '../../assests/restApi.webp'
 
 const SkillsSection = () => {
 
   const data = [
     {
       id: '1',
-      image: HTMLIcon,
-      title: 'HTML 5'
-    },
-    {
-      id: '2',
-      image: CssIcon,
-      title: 'CSS 3'
-    },
-    {
-      id: '3',
-      image: JsIcon,
-      title: 'Javascript'
-    },
-    {
-      id: '4',
-      image: TailwindIcon,
-      title: 'Tailwind css'
-    },
-    {
-      id: '5',
-      image: SassIcon,
-      title: 'Sass'
-    },
-    {
-      id: '6',
       image: ReactIcon,
       title: 'React Js'
     },
     {
-      id: '7',
+      id: '2',
+      image: NodeJsIcon,
+      title: 'Node js'
+    },
+    {
+      id: '3',
+      image: ExpressJsIcon,
+      title: 'express js'
+    },
+    {
+      id: '4',
+      image: mySqlIcon,
+      title: 'my sql'
+    },
+    {
+      id: '5',
       image: ReduxIcon,
       title: 'Redux'
     },
     {
+      id: '6',
+      image: HTMLIcon,
+      title: 'HTML 5'
+    },
+    {
+      id: '7',
+      image: CssIcon,
+      title: 'CSS 3'
+    },
+    {
       id: '8',
+      image: JsIcon,
+      title: 'Javascript'
+    },
+    {
+      id: '9',
+      image: TailwindIcon,
+      title: 'Tailwind css'
+    },
+    {
+      id: '10',
+      image: SassIcon,
+      title: 'Sass'
+    },
+    {
+      id: '11',
       image: GsapIcon,
       title: 'Gsap Animations'
     },
     {
-      id: '9',
+      id: '12',
       image: GitIcon,
       title: 'git'
     },
     {
-      id: '10',
+      id: '13',
       image: GithubIcon,
       title: 'github'
     },
+    {
+      id:'14',
+      image : RestApiIcon,
+      title : "rest API"
+    }
   ]
 
   return (
