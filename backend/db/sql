@@ -1,0 +1,68 @@
+CREATE DATABASE portfolio_db;
+
+USE portfolio_db;
+
+CREATE TABLE my_data (
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(15),
+    role VARCHAR(100), 
+    social_links TEXT, 
+    profile_resume TEXT, 
+    headline VARCHAR(255), 
+    bio TEXT, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO my_data (name, email, password, phone, role, social_links, profile_resume, headline, bio)
+VALUES
+    ('John Doe', 'john.doe@example.com', 'password123', '123-456-7890', 'User', 
+     '[\"http://twitter.com/johndoe\", \"http://facebook.com/johndoe\"]', 'resume_link_1', 'Software Developer', 'Passionate about coding and solving real-world problems.');
+
+
+
+CREATE TABLE skills (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    image VARCHAR(255) NOT NULL
+);
+
+INSERT INTO skills (name, image) 
+VALUES 
+    ('JavaScript', 'image_path_1'),
+    ('React.js', 'image_path_2'),
+    ('Node.js', 'image_path_3');
+
+
+CREATE TABLE projects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    tagline VARCHAR(255),
+    description TEXT,  -- Store detailed project description (including code)
+    tech_stack TEXT,   -- Store comma-separated list of skill IDs
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO projects (name, tagline, description, tech_stack)
+VALUES
+    ('Project 1', 'A web application built using React.js and Node.js', 
+     'This project involves building a full-stack web app using React for the frontend and Node.js for the backend. Below is a code snippet for the main API endpoint:<br><code>const express = require("express");<br>const app = express();<br>app.get("/", (req, res) => res.send("Hello World"));<br>app.listen(3000, () => console.log("Server running on port 3000"));<br></code>',
+     '1,2,3');
+
+
+SELECT p.name AS project_name, p.tagline, 
+       GROUP_CONCAT(s.name) AS tech_stack
+FROM projects p
+JOIN skills s ON FIND_IN_SET(s.id, p.tech_stack) > 0
+GROUP BY p.id;
+
+
+CREATE TABLE contacts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(60) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
