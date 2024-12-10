@@ -4,7 +4,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'nikhilsaiankilla@gmail.com', 
-        pass: '******' 
+        pass: 'vdpr sbns izxm ouko' 
     }
 });
 
@@ -23,9 +23,9 @@ const sendMessageController = async (req, res) => {
             subject: 'New Message from Portfolio Contact Form',
             text: `You received a new message from:
 
-            Name: ${name}
-            Email: ${email}
-            Message: ${message}`
+Name: ${name}
+Email: ${email}
+Message: ${message}`
         };
 
         await transporter.sendMail(mailToSelf);
@@ -37,14 +37,12 @@ const sendMessageController = async (req, res) => {
             subject: 'Message Received',
             text: `Hello ${name},
         
-                    Thank you for reaching out! I have received your message: 
-                    
-                    "${message}"
+Thank you for reaching out! I have received your message: 
   
-                    I will contact you soon.
+I will contact you soon.
   
-                    Best regards,
-                    Nikhil Sai Ankilla`
+Best regards,
+Nikhil Sai Ankilla`
         };
 
         await transporter.sendMail(mailToUser);

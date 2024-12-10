@@ -7,6 +7,8 @@ const projectsRoutes = require('./routes/projectRoute');
 const contactRoutes = require('./routes/contactRoute');
 const authRoutes = require('./routes/authRoute')
 
+const colors = require('colors');
+
 const app = express();
 const port = 8000;
 
@@ -25,5 +27,5 @@ app.use('/api/v1', projectsRoutes);
 app.use('/api/v1', contactRoutes);
 
 app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+    console.log(`Server running on http://localhost:${port}` .bgYellow.blue);
 });

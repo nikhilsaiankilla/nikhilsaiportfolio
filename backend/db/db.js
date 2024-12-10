@@ -1,15 +1,20 @@
-const mysql = require('mysql2');
+const { Sequelize } = require('sequelize');
 
-const db = mysql.createConnection({
+const sequelize = new Sequelize('portfolio', 'root', '1234', {
   host: 'localhost',
-  user: 'root', 
-  password: '1234',
-  database: 'portfolio',
+  dialect: 'mysql',
 });
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to the database.');
-});
+sequelize.authenticate()
+  .then(() => {
+    console.log('Connected to the database.' .green);
+    return sequelize.sync({ force: true });
+  })
+  .then(() => {
+    console.log('All tables have been recreated.' .yellow);
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err.message .red);
+  });
 
-module.exports = db;
+module.exports = sequelize;

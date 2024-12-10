@@ -2,32 +2,24 @@ const express = require('express');
 const db = require('../db/db');
 const router = express.Router();
 const middleware = require('../middleware/middleware');
+const { getAdminDataController, createAdminController, updateAdminController, updatePasswordController, forgetPasswordController, resetPasswordController } = require('../controller/adminController');
 
 //add admin
-router.post('/createAdmin', middleware, (req, res) => {
-    
-});
+router.post('/createAdmin', createAdminController);
 
 //get admin data
-router.get('/getAdminData', (req, res) => {
-    res.statusCode(200).send({
-        message : "sent"
-    })
-});
+router.get('/getAdmin', getAdminDataController);
 
 //update admin data
-router.put('/updateAdminData', middleware, (req, res) => {
-
-});
+router.put('/updateAdminData', updateAdminController);
 
 //update password
-router.put('/updatePassword', middleware, (req, res) => {
-
-});
+router.put('/updatePassword', updatePasswordController);
 
 //forget password
-router.put('/forgetPassword', middleware, (req, res) => {
+router.get('/forgetPassword', forgetPasswordController);
 
-});
+//reset password with otp
+router.put('/resetPasswordWithOpt', resetPasswordController)
 
 module.exports = router;
