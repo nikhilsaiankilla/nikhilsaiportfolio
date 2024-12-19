@@ -11,10 +11,10 @@ router.post('/createAdmin', createAdminController);
 router.get('/getAdmin', getAdminDataController);
 
 //update admin data
-router.put('/updateAdminData', updateAdminController);
+router.put('/updateAdminData',middleware, updateAdminController);
 
 //update password
-router.put('/updatePassword', updatePasswordController);
+router.put('/updatePassword',middleware, updatePasswordController);
 
 //forget password
 router.get('/forgetPassword', forgetPasswordController);

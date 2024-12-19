@@ -24,16 +24,18 @@ const Project = sequelize.define('Project', {
         type: DataTypes.STRING(255),
         allowNull: true,
     },
+    image : {
+        type : DataTypes.STRING(255),
+        allowNull : false,
+    },
     created_at: {
-        type: DataTypes.TIMESTAMP,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,  
     },
     updated_at: {
-        type: DataTypes.TIMESTAMP,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-        onUpdate: Sequelize.literal('CURRENT_TIMESTAMP'),
-        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,  
+        onUpdate: DataTypes.NOW,  
     },
 }, {
     tableName: 'projects',

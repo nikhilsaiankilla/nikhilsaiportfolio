@@ -11,6 +11,7 @@ const colors = require('colors');
 
 const app = express();
 const port = 8000;
+require('dotenv').config()
 
 app.use(cors());
 app.use(bodyParser.json());

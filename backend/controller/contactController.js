@@ -1,10 +1,11 @@
 const nodemailer = require('nodemailer');
+const { Contact } = require('../model/contactModel')
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'nikhilsaiankilla@gmail.com', 
-        pass: 'vdpr sbns izxm ouko' 
+        user: 'nikhilsaiankilla@gmail.com',
+        pass: 'vdpr sbns izxm ouko'
     }
 });
 
@@ -30,6 +31,12 @@ Message: ${message}`
 
         await transporter.sendMail(mailToSelf);
 
+        const newEmail = await Contact.create({
+            name: name,
+            email: email,
+            message: message
+        })
+
         // Send confirmation email to the user
         const mailToUser = {
             from: 'nikhilsaiankilla@gmail.com',
@@ -51,9 +58,23 @@ Nikhil Sai Ankilla`
         res.status(200).json({ message: 'Your message has been sent. Nikhil will contact you soon. Thank you!' });
 
     } catch (error) {
-        console.error('Error sending email:', error);
         res.status(500).json({ error: 'Failed to send message. Please try again later.' });
     }
 }
 
-module.exports = { sendMessageController };
+const getAllMessages = async (req, res) => {
+    try {
+        const allMessages = await Contact.findAll();
+
+        if (allMessages.length == 0) {
+            return res.status(404).send({ message: "failed", data: allMessages })
+        }
+
+        return res.status(200).send({ message: "success", data: allMessages })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to send message. Please try again later.' });
+    }
+}
+
+module.exports = { sendMessageController, getAllMessages };

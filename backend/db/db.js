@@ -8,7 +8,7 @@ const sequelize = new Sequelize('portfolio', 'root', '1234', {
 sequelize.authenticate()
   .then(() => {
     console.log('Connected to the database.' .green);
-    return sequelize.sync({ force: true });
+    return sequelize.sync({ force: false });
   })
   .then(() => {
     console.log('All tables have been recreated.' .yellow);

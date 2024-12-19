@@ -16,9 +16,13 @@ const Contact = sequelize.define('Contact', {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
+  message : {
+    type : DataTypes.TEXT,
+    allowNull : false,
+  },
   submitted_at: {
     type: DataTypes.DATE,
-    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),  
+    defaultValue: Sequelize.NOW,  
     allowNull: false,
   },
 }, {
