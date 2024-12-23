@@ -2,7 +2,7 @@ import './style.scss'
 
 //Importing Components
 import PageTitle from '../../components/pageTitle/PageTitle'
-import ProjectItem from '../../components/projectItem/ProjectItem';
+import Project from '../../components/Project/Project'
 
 //Importing Images
 import { project1, gpt, spotify, portfolio, ecom, blog, moviesApp } from '../../assests/index'
@@ -64,15 +64,16 @@ const ProjectsSection = () => {
   return (
     <div className='project-section' id='ProjectsSection'>
       <PageTitle title="Projects" color='white' />
-      
-      <div className="container">
-        <div className="row">
-          {/* <ProjectItem project={projects[2]}/> */}
-          <div className='dummy'>
 
-          </div>
-        </div>
+      <div className="project-container">
+        {
+          projects.map(p => {
+            return (<Project project={p} />)
+          })
+        }
       </div>
+
+
     </div>
   )
 }

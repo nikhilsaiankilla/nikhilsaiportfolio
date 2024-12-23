@@ -1,13 +1,24 @@
+@import '../../responsive.scss';
+
 .project-section {
     width: 100%;
-    height: 100vh;
-    padding: 2rem 0;
+    min-height: 100vh;
+    padding: 4rem 0;
+    .project-container {
+        width: 100vw;
+        height: 100%;
 
-    .container{
-        width: 100%;
-        
-    }
-    .dummy{
+        padding: 2rem 0rem 1rem;
 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        @include medium-large-screen {
+            padding: 2.5rem 1rem;
+            gap: 1.5rem;
+        }
     }
 }

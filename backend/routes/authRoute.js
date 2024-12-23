@@ -5,8 +5,6 @@ const { adminLoginController } = require('../controller/authController');
 
 router.post('/login', adminLoginController)
 
-router.post('/logout', middleware, (req, res) => {
-    
-})
+router.post('/logout', middleware, (req, res) => {})
 
 module.exports = router;

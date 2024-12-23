@@ -31,13 +31,13 @@ const getAllprojectsController = async (req, res) => {
 
 const getProjectController = async (req, res) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
 
-        const project = await Project.findOne({
+       const project = await Project.findOne({
             where: { id },
             include: {
                 model: Skills,
-                through: { attributes: [] },
+                through: { attributes: [] },  // Exclude the join table data
             },
         });
 
@@ -46,11 +46,14 @@ const getProjectController = async (req, res) => {
             message: "project not found"
         })
 
-        return res.status(200), send({
+        return res.status(200).send({
             status: "success",
-            message: "projects found",
-            data: project
-        })
+            message: "project found",
+            data: {
+                ...project.toJSON(), // Converts the Sequelize model instance to plain JSON
+                skillIds: JSON.parse(project.skillIds), // Return parsed skill IDs if applicable
+            },
+        });
     } catch (error) {
         console.log(error);
         return res.status(400).send({
@@ -64,39 +67,38 @@ const addProjectsController = async (req, res) => {
     try {
         const { name, tagline, description, skillIds, image } = req.body;
 
-        if (!name, !tagline, !description, !skillIds, !image) {
-            return res.status(500).send({
+        // Validate required fields
+        if (!name || !tagline || !description || !skillIds || !image) {
+            return res.status(400).send({
                 status: "failed",
-                message: "all fields are requied"
-            })
+                message: "All fields are required"
+            });
         }
 
+        // Create the new project
         const newProject = await Project.create({
             name,
             tagline,
             description,
-            tech_stack,
-            image
-        })
-
-        if (skillIds && skillIds.length > 0) {
-            const skills = await Skills.findAll({ where: { id: skillIds } });
-            await newProject.addSkills(skills);
-        }
+            skillIds,
+            image,
+        });
 
         return res.status(200).send({
             status: "success",
-            message: "project created successfully",
+            message: "Project created successfully",
             data: newProject,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "failed",
-            error: error.message || error
-        })
+        console.error(error);
+        return res.status(500).send({
+            status: "failed",
+            message: "An error occurred while creating the project",
+            error: error.message || error,
+        });
     }
-}
+};
+
 
 const updateProjectsController = async (req, res) => {
     try {

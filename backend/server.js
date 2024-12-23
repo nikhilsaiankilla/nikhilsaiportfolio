@@ -9,9 +9,18 @@ const authRoutes = require('./routes/authRoute')
 
 const colors = require('colors');
 
+const { Project, Skills } = require('./db/associations')
+const sequelize = require('./db/db')
+
 const app = express();
 const port = 8000;
 require('dotenv').config()
+
+sequelize.sync().then(() => {
+    console.log('database synced' .magenta);
+}).catch((err) => {
+    console.log("error", err .red);
+})
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -28,5 +37,5 @@ app.use('/api/v1', projectsRoutes);
 app.use('/api/v1', contactRoutes);
 
 app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}` .bgYellow.blue);
+    console.log(`Server running on http://localhost:${port}`.bgYellow.blue);
 });
