@@ -16,11 +16,15 @@ const app = express();
 const port = 8000;
 require('dotenv').config()
 
-sequelize.sync().then(() => {
-    console.log('database synced' .magenta);
-}).catch((err) => {
-    console.log("error", err .red);
-})
+// Synchronize models with the database
+sequelize
+    .sync({ alter: true }) // Use `alter: true` to adjust schema
+    .then(() => {
+        console.log('Database synced'.magenta);
+    })
+    .catch((err) => {
+        console.log('Error syncing database:', err.red);
+    });
 
 app.use(cors());
 app.use(bodyParser.json());

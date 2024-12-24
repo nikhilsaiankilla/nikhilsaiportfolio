@@ -67,10 +67,10 @@ const getAllMessages = async (req, res) => {
         const allMessages = await Contact.findAll();
 
         if (allMessages.length == 0) {
-            return res.status(404).send({ message: "failed", data: allMessages })
+            return res.status(404).send({ status: "failed", data: allMessages })
         }
 
-        return res.status(200).send({ message: "success", data: allMessages })
+        return res.status(200).send({ status: "success", data: allMessages })
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to send message. Please try again later.' });

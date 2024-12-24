@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize');
+const colors = require('colors');
 
 const sequelize = new Sequelize('portfolio', 'root', '1234', {
   host: 'localhost',
@@ -14,7 +15,7 @@ sequelize.authenticate()
     console.log('All tables have been recreated.'.yellow);
   })
   .catch((err) => {
-    console.error('Unable to connect to the database:', err.message.red);
+    console.error('Unable to connect to the database:', err.message);
   });
 
 module.exports = sequelize;

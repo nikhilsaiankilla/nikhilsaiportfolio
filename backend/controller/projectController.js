@@ -1,5 +1,6 @@
-const { Project } = require('../model/projectsModel')
-const { Skills } = require('../model/skillsModel')
+const { Project } = require('../model/projectsModel');
+const { Skills } = require('../model/skillsModel');
+const { uploadOnCloudinary } = require('../utils/cloudinary');
 
 const getAllprojectsController = async (req, res) => {
     try {
@@ -10,81 +11,110 @@ const getAllprojectsController = async (req, res) => {
             },
         });
 
-        if (projects.length < 1) return res.status(404).send({
-            status: "failed",
-            message: "Zero projects found"
-        })
+        if (!projects.length) {
+            return res.status(404).send({
+                status: "failed",
+                message: "No projects found",
+            });
+        }
 
-        return res.status(200), send({
+        return res.status(200).send({
             status: "success",
-            message: "projects found",
-            data: projects
-        })
+            message: "Projects found",
+            data: projects,
+        });
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "failed",
-            error: error.message || error
-        })
+        console.error(error);
+        return res.status(500).send({
+            status: "failed",
+            message: "An error occurred",
+            error: error.message || error,
+        });
     }
-}
+};
 
 const getProjectController = async (req, res) => {
     try {
         const { id } = req.params;
 
-       const project = await Project.findOne({
+        const project = await Project.findOne({
             where: { id },
-            include: {
-                model: Skills,
-                through: { attributes: [] },  // Exclude the join table data
-            },
+            include: { model: Skills },
         });
 
-        if (!project) return res.status(404).send({
-            status: "failed",
-            message: "project not found"
-        })
-
-        return res.status(200).send({
-            status: "success",
-            message: "project found",
-            data: {
-                ...project.toJSON(), // Converts the Sequelize model instance to plain JSON
-                skillIds: JSON.parse(project.skillIds), // Return parsed skill IDs if applicable
-            },
-        });
-    } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "failed",
-            error: error.message || error
-        })
-    }
-}
-
-const addProjectsController = async (req, res) => {
-    try {
-        const { name, tagline, description, skillIds, image } = req.body;
-
-        // Validate required fields
-        if (!name || !tagline || !description || !skillIds || !image) {
-            return res.status(400).send({
+        if (!project) {
+            return res.status(404).send({
                 status: "failed",
-                message: "All fields are required"
+                message: "Project not found",
             });
         }
 
-        // Create the new project
+        return res.status(200).send({
+            status: "success",
+            message: "Project found",
+            data: project,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({
+            status: "failed",
+            message: "An error occurred",
+            error: error.message || error,
+        });
+    }
+};
+
+const addProjectsController = async (req, res) => {
+    try {
+        const { name, tagline, demo_url, code_url, description, skillIds } = req.body;
+
+        if (!name || !tagline || !description || !demo_url || !code_url) {
+            return res.status(400).send({
+                status: "failed",
+                message: "All fields are required",
+            });
+        }
+
+        const imageLocalPath = req?.file?.path;
+
+        if (!imageLocalPath) return res.status(400).send({
+            status: "failed",
+            message: "project thumbnail is required",
+        });
+
+        const projectThumbnail = await uploadOnCloudinary(imageLocalPath);
+
+        if (!projectThumbnail) return res.status(500).send({
+            status: "failed",
+            message: "project thumbnail failed to upload",
+        });
+
         const newProject = await Project.create({
             name,
             tagline,
             description,
-            skillIds,
-            image,
+            demo_url,
+            code_url,
+            image_url: projectThumbnail.url,
         });
 
-        return res.status(200).send({
+        // If skillIds are provided, associate skills with the project
+        if (skillIds && skillIds.length > 0) {
+            // Validate if skills exist in the database
+            const skills = await Skills.findAll({ where: { id: skillIds } });
+            if (skills.length !== skillIds.length) {
+                return res.status(400).send({
+                    status: "failed",
+                    message: "One or more skill IDs are invalid",
+                });
+            }
+
+            // Associate the skills with the newly created project
+            await newProject.setSkills(skills);
+        }
+
+
+        return res.status(201).send({
             status: "success",
             message: "Project created successfully",
             data: newProject,
@@ -99,88 +129,115 @@ const addProjectsController = async (req, res) => {
     }
 };
 
-
 const updateProjectsController = async (req, res) => {
     try {
-        const { id, name, tagline, description, skillIds, image } = req.body;
+        const { name, tagline, description, code_url, image_url, demo_url, skillIds } = req.body;
 
-        if (!id) return res.status(500).send({
-            status: "failed",
-            message: "project id is required"
-        })
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).send({
+                status: "failed",
+                message: "Project ID is required",
+            });
+        }
 
         const project = await Project.findByPk(id);
 
-        if (!project) return res.status(404).send({
-            status: "failed",
-            message: "project not found"
-        })
-
-        const updates = {};
-
-        if (name) updates.name = name;
-        if (tagline) updates.tagline = tagline;
-        if (image) updates.image = image;
-        if (description) updates.description = description;
-
-        if (Object.keys(updates).length === 0) {
-            return res.status(400).send({
+        if (!project) {
+            return res.status(404).send({
                 status: "failed",
-                message: "At least one field (other than password) must be provided for updating."
-            })
+                message: "Project not found",
+            });
         }
 
-        const updateProject = await project.update(updates);
+        const updates = {};
+        if (name) updates.name = name;
+        if (tagline) updates.tagline = tagline;
+        if (description) updates.description = description;
+        if (code_url) updates.code_url = code_url;
+        if (demo_url) updates.demo_url = demo_url;
 
+        const imageLocalPath = req?.file?.path;
+
+        if (imageLocalPath) {
+            const projectThumbnail = await uploadOnCloudinary(imageLocalPath);
+
+            if (!projectThumbnail) return res.status(500).send({
+                status: "failed",
+                message: "project thumbnail failed to upload",
+            });
+
+            updates.image_url = projectThumbnail.url;
+        }
+
+        await project.update(updates);
+
+        // If skillIds are provided, update the project's skills
         if (skillIds && skillIds.length > 0) {
+            // Fetch skills by their IDs
             const skills = await Skills.findAll({ where: { id: skillIds } });
+
+            // Set new skills for the project (this will add or remove skills as needed)
             await project.setSkills(skills);
         }
 
+
         return res.status(200).send({
             status: "success",
-            message: "project updated successfully",
-            data: updateProject
+            message: "Project updated successfully",
+            data: project,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "failed",
-            error: error.message || error
-        })
+        console.error(error);
+        return res.status(500).send({
+            status: "failed",
+            message: "An error occurred while updating the project",
+            error: error.message || error,
+        });
     }
-}
+};
 
 const deleteProjectController = async (req, res) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
 
-        if (!id) return res.status(500).send({
-            status: "failed",
-            message: "project id is required"
-        })
+        if (!id) {
+            return res.status(400).send({
+                status: "failed",
+                message: "Project ID is required",
+            });
+        }
 
         const project = await Project.findByPk(id);
 
-        if (!project) return res.status(404).send({
-            status: "failed",
-            message: "project not found"
-        })
+        if (!project) {
+            return res.status(404).send({
+                status: "failed",
+                message: "Project not found",
+            });
+        }
 
-        const deletedProject = await project.destroy()
+        await project.destroy();
 
         return res.status(200).send({
             status: "success",
-            message: "project deleted",
-            data: deletedProject
-        })
+            message: "Project deleted successfully",
+        });
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({
-            message: "failed",
-            error: error.message || error
-        })
+        console.error(error);
+        return res.status(500).send({
+            status: "failed",
+            message: "An error occurred while deleting the project",
+            error: error.message || error,
+        });
     }
-}
+};
 
-module.exports = { getAllprojectsController, getProjectController, addProjectsController, updateProjectsController, deleteProjectController }
+module.exports = {
+    getAllprojectsController,
+    getProjectController,
+    addProjectsController,
+    updateProjectsController,
+    deleteProjectController,
+};
