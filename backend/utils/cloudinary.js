@@ -3,31 +3,18 @@ const fs = require('fs');
 
 v2.config({
     cloud_name: "do5y2mtpk",
-    api_key:"599354484592399",
-    api_secret:"ZdtI_PYRJapF-4OocHFeEaMKtTI",
+    api_key: "599354484592399",
+    api_secret: "ZdtI_PYRJapF-4OocHFeEaMKtTI",
 });
 
 const uploadOnCloudinary = async (localFilePath) => {
     try {
-
-        console.log("this is inside uploadOnCloudinary");
-        
         if (!localFilePath) return null;
-
-        console.log("local file found");
-        console.log("uploading to cloud");
-        console.log("this is local file path", localFilePath);
-        
         const response = await v2.uploader.upload(localFilePath, {
             resource_type: "auto",
             folder: "portfolio",
         });
-
-        console.log("uploaded successfully");
-        console.log("if local file path exist then delete");
-        
         if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath);
-        console.log("deleted local path");
         return response;
     } catch (error) {
         console.error("Error uploading file to Cloudinary:", error);
@@ -36,7 +23,6 @@ const uploadOnCloudinary = async (localFilePath) => {
         } catch (deleteError) {
             console.error("Error deleting local file after upload failure:", deleteError);
         }
-
         return null;
     }
 };

@@ -9,7 +9,7 @@ const adminLoginController = async (req, res) => {
         // Validation checks
         if (!email || !password) {
             return res.status(400).send({
-                message: "Missing required fields",
+                success: false,
                 error: "Email and password are required."
             });
         }
@@ -18,7 +18,7 @@ const adminLoginController = async (req, res) => {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (!emailRegex.test(email)) {
             return res.status(400).send({
-                message: "Invalid email format",
+                success: false,
                 error: "Please provide a valid email address."
             });
         }
@@ -26,7 +26,7 @@ const adminLoginController = async (req, res) => {
         // Validate password strength (minimum 8 characters)
         if (password.length < 8) {
             return res.status(400).send({
-                message: "Weak password",
+                success: false,
                 error: "Password must be at least 8 characters long."
             });
         }
@@ -35,7 +35,7 @@ const adminLoginController = async (req, res) => {
 
         if (!user) {
             return res.status(404).send({
-                message: "failed",
+                success: false,
                 error: "user not found"
             })
         }
@@ -44,7 +44,7 @@ const adminLoginController = async (req, res) => {
 
         if (!isPasswordValid) {
             return res.status(401).send({
-                message: "failed",
+                success: false,
                 error: "invalid credentials"
             })
         }
@@ -62,10 +62,9 @@ const adminLoginController = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error in adminLoginController:", error);
         return res.status(500).send({
-            message: "failed",
-            error: error.message || "Internal Server Error"
+            success: false,
+            error: error || "something went wrong while logging to your account"
         });
     }
 }

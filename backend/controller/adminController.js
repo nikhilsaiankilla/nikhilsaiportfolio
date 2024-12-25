@@ -9,14 +9,14 @@ const getAdminDataController = async (req, res) => {
         const data = await MyData.findAll();
 
         return res.status(500).send({
-            message: "success",
+            success: true,
             data: data
         })
     } catch (error) {
         return res.status(500).send({
-            message: "failed",
-            err: error || "error in adminModel"
-        })
+            success: false,
+            error: error || "something went wrong while fetching the admin"
+        });
     }
 };
 
@@ -27,7 +27,7 @@ const createAdminController = async (req, res) => {
         // Validation checks
         if (!name || !email || !password || !phone || !role || !social_links) {
             return res.status(400).send({
-                message: "Missing required fields",
+                success: false,
                 error: "Name, email, password, phone, role, and social_links are required."
             });
         }
@@ -36,7 +36,7 @@ const createAdminController = async (req, res) => {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (!emailRegex.test(email)) {
             return res.status(400).send({
-                message: "Invalid email format",
+                success: false,
                 error: "Please provide a valid email address."
             });
         }
@@ -44,7 +44,7 @@ const createAdminController = async (req, res) => {
         // Validate password strength (minimum 8 characters)
         if (password.length < 8) {
             return res.status(400).send({
-                message: "Weak password",
+                success: false,
                 error: "Password must be at least 8 characters long."
             });
         }
@@ -53,7 +53,7 @@ const createAdminController = async (req, res) => {
         const phoneRegex = /^[0-9]{10}$/; // assuming 10-digit phone number
         if (!phoneRegex.test(phone)) {
             return res.status(400).send({
-                message: "Invalid phone number",
+                success: false,
                 error: "Please provide a valid 10-digit phone number."
             });
         }
@@ -69,14 +69,14 @@ const createAdminController = async (req, res) => {
                 });
             } else {
                 return res.status(400).send({
-                    message: "Invalid social_links format",
+                    success: false,
                     error: "social_links should be an array of valid URLs."
                 });
             }
         } catch (err) {
             return res.status(400).send({
-                message: "Invalid social_links",
-                error: err.message
+                success: false,
+                error: err || "something went wrong while evaluating the social links"
             });
         }
 
@@ -96,14 +96,14 @@ const createAdminController = async (req, res) => {
         });
 
         return res.status(200).send({
-            message: "Admin created successfully",
+            success: true,
             data: newAdmin,
         });
 
     } catch (error) {
         return res.status(500).send({
-            message: "Failed",
-            err: error
+            success: false,
+            error: error || "something went wrong while creating admin",
         });
     }
 };
@@ -115,7 +115,7 @@ const updateAdminController = async (req, res) => {
         // Ensure email is provided to identify the record
         if (!email) {
             return res.status(400).send({
-                message: "Email is required",
+                success: false,
                 error: "Please provide the email of the admin to update."
             });
         }
@@ -124,7 +124,7 @@ const updateAdminController = async (req, res) => {
 
         if (!admin) {
             return res.status(404).send({
-                message: "Admin not found",
+                success: false,
                 error: "No admin found with the provided email."
             });
         }
@@ -140,7 +140,7 @@ const updateAdminController = async (req, res) => {
         //return if there are no updates
         if (Object.keys(updates).length === 0) {
             return res.status(400).send({
-                message: "No valid fields to update",
+                success: false,
                 error: "At least one field (other than password) must be provided for updating."
             });
         }
@@ -148,14 +148,14 @@ const updateAdminController = async (req, res) => {
         const updatedAdmin = await admin.update(updates);
 
         return res.status(200).send({
-            message: "Admin data updated successfully",
+            success: true,
             data: updatedAdmin
         });
 
     } catch (error) {
         return res.status(500).send({
-            message: "Failed",
-            error: error.message || error
+            success: false,
+            error: error || "something went wrong while updating the admin data"
         });
     }
 };
@@ -167,7 +167,7 @@ const updatePasswordController = async (req, res) => {
         // Ensure all required fields are provided
         if (!email || !newPassword || !confirmPassword) {
             return res.status(400).send({
-                message: "All fields are required",
+                success: false,
                 error: "Please provide email, new password, and confirm password."
             });
         }
@@ -175,7 +175,7 @@ const updatePasswordController = async (req, res) => {
         // Validate that the new password and confirm password match
         if (newPassword !== confirmPassword) {
             return res.status(400).send({
-                message: "Passwords do not match",
+                success: false,
                 error: "The new password and confirmation password must match."
             });
         }
@@ -185,7 +185,7 @@ const updatePasswordController = async (req, res) => {
 
         if (!passwordPattern.test(newPassword)) {
             return res.status(400).send({
-                message: "Invalid password",
+                success: false,
                 error: "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character."
             });
         }
@@ -195,7 +195,7 @@ const updatePasswordController = async (req, res) => {
 
         if (!admin) {
             return res.status(404).send({
-                message: "Admin not found",
+                success: false,
                 error: "No admin found with the provided email."
             });
         }
@@ -205,15 +205,18 @@ const updatePasswordController = async (req, res) => {
         // Hash password asynchronously
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        await admin.update({ password: hashedPassword });
+        const user = await admin.update({ password: hashedPassword });
+
+        user.password = undefined;
 
         return res.status(200).send({
-            message: "Password updated successfully"
+            success: true,
+            data: user
         });
     } catch (error) {
         return res.status(500).send({
-            message: "Failed",
-            error: error
+            success: false,
+            error: error || "something went wrong while updating password"
         });
     }
 };
@@ -225,7 +228,10 @@ const forgetPasswordController = async (req, res) => {
         const admin = await MyData.findOne({ where: { email } });
 
         if (!admin) {
-            return res.status(404).send('Email not found.');
+            return res.status(404).send({
+                success: true,
+                error: "admin not found"
+            });
         }
 
         // Generate OTP
@@ -233,7 +239,7 @@ const forgetPasswordController = async (req, res) => {
         const otpExpiry = new Date();
 
         // OTP valid for 10 minutes
-        otpExpiry.setMinutes(otpExpiry.getMinutes() + 10); 
+        otpExpiry.setMinutes(otpExpiry.getMinutes() + 10);
 
         admin.otp = otp;
         admin.otp_expiration = otpExpiry;
@@ -242,12 +248,15 @@ const forgetPasswordController = async (req, res) => {
         // Send OTP to user email
         const data = await sendOTPEmail(email, otp);
 
-        return res.status(200).send({ message: "success", data: data });
+        return res.status(200).send({
+            success: false,
+            data: data
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).send({
-            message: "failed",
-            error: error.message || error
+
+        return res.status(500).send({
+            success: false,
+            error: error || "something went wrong while resetting password" 
         });
     }
 };
@@ -260,22 +269,22 @@ const resetPasswordController = async (req, res) => {
 
         if (!admin) {
             return res.status(404).send({
-                message : "failed",
-                error : "Email not found."
+                success: false,
+                error: "Email not found."
             });
         }
 
         if (admin.otp !== parseInt(otp, 10)) {
             return res.status(400).send({
-                message : "failed",
-                error : "Invalid OTP."
+                success: false,
+                error: "Invalid OTP."
             });
         }
 
         if (new Date() > new Date(admin.otp_expiration)) {
             return res.status(400).send({
-                message : "failed",
-                error : "OTP has expired."
+                success: false,
+                error: "OTP has expired."
             });
         }
 
@@ -288,10 +297,15 @@ const resetPasswordController = async (req, res) => {
         admin.otpExpiry = null;
         const updatedData = await admin.save();
 
-        return res.status(200).send({ message: "success", data: updatedData })
+        return res.status(200).send({ 
+            success: false,
+            data: updatedData 
+        })
     } catch (error) {
-        console.error(error);
-        return res.status(500).send({ message: "failed", error: error.message || error });
+        return res.status(500).send({ 
+            success: false,
+            error: error || "something went wrong while resetting password"
+        });
     }
 }
 

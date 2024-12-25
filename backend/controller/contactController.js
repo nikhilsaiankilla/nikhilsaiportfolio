@@ -2,27 +2,30 @@ const nodemailer = require('nodemailer');
 const { Contact } = require('../model/contactModel')
 
 const transporter = nodemailer.createTransport({
-    service: process.env.EMAIL_SERVICE,
-    auth: {
-        user: process.env.EMAIL_ID,
-        pass: process.env.EMAIL_PASSWORD
-    }
+  service: process.env.EMAIL_SERVICE,
+  auth: {
+    user: process.env.EMAIL_ID,
+    pass: process.env.EMAIL_PASSWORD
+  }
 });
 
 const sendMessageController = async (req, res) => {
-    const { name, email, message } = req.body;
+  const { name, email, message } = req.body;
 
-    if (!name || !email || !message) {
-        return res.status(400).json({ error: 'All fields are required' });
-    }
+  if (!name || !email || !message) {
+    return res.status(400).json({
+      success: false,
+      error: 'All fields are required'
+    });
+  }
 
-    try {
-        // Send email to yourself
-        const mailToSelf = {
-            from: email,
-            to: process.env.EMAIL_ID,
-            subject: 'New Message from Portfolio Contact Form',
-            html: `
+  try {
+    // Send email to yourself
+    const mailToSelf = {
+      from: email,
+      to: process.env.EMAIL_ID,
+      subject: 'New Message from Portfolio Contact Form',
+      html: `
               <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
                 <div style="max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
                   <div style="background-color: #007BFF; color: white; padding: 20px; text-align: center;">
@@ -52,23 +55,23 @@ const sendMessageController = async (req, res) => {
                 </div>
               </div>
             `,
-        };
+    };
 
 
-        await transporter.sendMail(mailToSelf);
+    await transporter.sendMail(mailToSelf);
 
-        const newEmail = await Contact.create({
-            name: name,
-            email: email,
-            message: message
-        })
+    const newEmail = await Contact.create({
+      name: name,
+      email: email,
+      message: message
+    })
 
-        // Send confirmation email to the user
-        const mailToUser = {
-            from: process.env.EMAIL_ID,
-            to: email,
-            subject: 'Message Received',
-            html: `
+    // Send confirmation email to the user
+    const mailToUser = {
+      from: process.env.EMAIL_ID,
+      to: email,
+      subject: 'Message Received',
+      html: `
               <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
                 <div style="max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
                   <div style="background-color: #4CAF50; color: white; padding: 20px; text-align: center;">
@@ -91,32 +94,46 @@ const sendMessageController = async (req, res) => {
                 </div>
               </div>
             `,
-        };
+    };
 
 
-        await transporter.sendMail(mailToUser);
+    await transporter.sendMail(mailToUser);
 
-        // Respond with success message
-        res.status(200).json({ message: 'Your message has been sent. Nikhil will contact you soon. Thank you!' });
+    // Respond with success message
+    return res.status(200).json({
+      success: false,
+      data: 'Your message has been sent. Nikhil will contact you soon. Thank you!'
+    });
 
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to send message. Please try again later.' });
-    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error || 'Failed to send message. Please try again later.'
+    });
+  }
 }
 
 const getAllMessages = async (req, res) => {
-    try {
-        const allMessages = await Contact.findAll();
+  try {
+    const allMessages = await Contact.findAll();
 
-        if (allMessages.length == 0) {
-            return res.status(404).send({ status: "failed", data: allMessages })
-        }
-
-        return res.status(200).send({ status: "success", data: allMessages })
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to send message. Please try again later.' });
+    if (allMessages.length == 0) {
+      return res.status(404).send({
+        success: false,
+        error: "no messages found"
+      })
     }
+
+    return res.status(200).send({
+      success: true,
+      data: allMessages
+    })
+  } catch (error) {
+    return res.status(500).json({ 
+      success: false,
+      error: error || 'Failed to send message. Please try again later.' 
+    });
+  }
 }
 
 module.exports = { sendMessageController, getAllMessages };

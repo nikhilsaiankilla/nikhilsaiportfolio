@@ -13,22 +13,19 @@ const getAllprojectsController = async (req, res) => {
 
         if (!projects.length) {
             return res.status(404).send({
-                status: "failed",
-                message: "No projects found",
+                success: false,
+                error: "No projects found",
             });
         }
 
         return res.status(200).send({
-            status: "success",
-            message: "Projects found",
+            success: true,
             data: projects,
         });
     } catch (error) {
-        console.error(error);
         return res.status(500).send({
-            status: "failed",
-            message: "An error occurred",
-            error: error.message || error,
+            success: false,
+            error: error || "something went wrong while fetching projects",
         });
     }
 };
@@ -44,22 +41,19 @@ const getProjectController = async (req, res) => {
 
         if (!project) {
             return res.status(404).send({
-                status: "failed",
-                message: "Project not found",
+                success: false,
+                error: "Project not found",
             });
         }
 
         return res.status(200).send({
-            status: "success",
-            message: "Project found",
+            success: true,
             data: project,
         });
     } catch (error) {
-        console.error(error);
         return res.status(500).send({
-            status: "failed",
-            message: "An error occurred",
-            error: error.message || error,
+            success: false,
+            error: error || "something went wrong while getting projects",
         });
     }
 };
@@ -70,23 +64,23 @@ const addProjectsController = async (req, res) => {
 
         if (!name || !tagline || !description || !demo_url || !code_url) {
             return res.status(400).send({
-                status: "failed",
-                message: "All fields are required",
+                success: false,
+                error: "All fields are required",
             });
         }
 
         const imageLocalPath = req?.file?.path;
 
         if (!imageLocalPath) return res.status(400).send({
-            status: "failed",
-            message: "project thumbnail is required",
+            success: false,
+            error: "project thumbnail is required",
         });
 
         const projectThumbnail = await uploadOnCloudinary(imageLocalPath);
 
         if (!projectThumbnail) return res.status(500).send({
-            status: "failed",
-            message: "project thumbnail failed to upload",
+            success: false,
+            error: "project thumbnail failed to upload",
         });
 
         const newProject = await Project.create({
@@ -104,8 +98,8 @@ const addProjectsController = async (req, res) => {
             const skills = await Skills.findAll({ where: { id: skillIds } });
             if (skills.length !== skillIds.length) {
                 return res.status(400).send({
-                    status: "failed",
-                    message: "One or more skill IDs are invalid",
+                    success: false,
+                    error: "One or more skill IDs are invalid",
                 });
             }
 
@@ -114,17 +108,14 @@ const addProjectsController = async (req, res) => {
         }
 
 
-        return res.status(201).send({
-            status: "success",
-            message: "Project created successfully",
+        return res.status(200).send({
+            success: false,
             data: newProject,
         });
     } catch (error) {
-        console.error(error);
         return res.status(500).send({
-            status: "failed",
-            message: "An error occurred while creating the project",
-            error: error.message || error,
+            success: false,
+            error: error || "An error occurred while creating the project",
         });
     }
 };
@@ -137,8 +128,8 @@ const updateProjectsController = async (req, res) => {
 
         if (!id) {
             return res.status(400).send({
-                status: "failed",
-                message: "Project ID is required",
+                success: false,
+                error: "Project ID is required",
             });
         }
 
@@ -146,8 +137,8 @@ const updateProjectsController = async (req, res) => {
 
         if (!project) {
             return res.status(404).send({
-                status: "failed",
-                message: "Project not found",
+                success: false,
+                error : "Project not found",
             });
         }
 
@@ -164,8 +155,8 @@ const updateProjectsController = async (req, res) => {
             const projectThumbnail = await uploadOnCloudinary(imageLocalPath);
 
             if (!projectThumbnail) return res.status(500).send({
-                status: "failed",
-                message: "project thumbnail failed to upload",
+                success: false,
+                error: "project thumbnail failed to upload",
             });
 
             updates.image_url = projectThumbnail.url;
@@ -184,16 +175,13 @@ const updateProjectsController = async (req, res) => {
 
 
         return res.status(200).send({
-            status: "success",
-            message: "Project updated successfully",
+            success: true,
             data: project,
         });
     } catch (error) {
-        console.error(error);
         return res.status(500).send({
-            status: "failed",
-            message: "An error occurred while updating the project",
-            error: error.message || error,
+            success: false,
+            error: error ||  "An error occurred while updating the project",
         });
     }
 };
@@ -204,8 +192,8 @@ const deleteProjectController = async (req, res) => {
 
         if (!id) {
             return res.status(400).send({
-                status: "failed",
-                message: "Project ID is required",
+                success: false,
+                error: "Project ID is required",
             });
         }
 
@@ -213,23 +201,21 @@ const deleteProjectController = async (req, res) => {
 
         if (!project) {
             return res.status(404).send({
-                status: "failed",
-                message: "Project not found",
+                success: false,
+                error: "Project not found",
             });
         }
 
         await project.destroy();
 
         return res.status(200).send({
-            status: "success",
-            message: "Project deleted successfully",
+            success: true,
+            error : "Project deleted successfully",
         });
     } catch (error) {
-        console.error(error);
         return res.status(500).send({
-            status: "failed",
-            message: "An error occurred while deleting the project",
-            error: error.message || error,
+            success: false,
+            error: error || "An error occurred while deleting the project",
         });
     }
 };

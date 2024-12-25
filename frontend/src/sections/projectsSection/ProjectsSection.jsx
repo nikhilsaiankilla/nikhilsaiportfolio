@@ -4,10 +4,22 @@ import './style.scss'
 import PageTitle from '../../components/pageTitle/PageTitle'
 import Project from '../../components/Project/Project'
 
+import useFetch from '../../utils/fetchHook';
+
 //Importing Images
 import { project1, gpt, spotify, portfolio, ecom, blog, moviesApp } from '../../assests/index'
 
 const ProjectsSection = () => {
+
+  const { loading, data, error } = useFetch('/getAllSkills');
+
+  if (error) {
+    console.log(error);
+  }
+
+  if (data) {
+    console.log(data);
+  }
 
   let projects = [
     {
@@ -67,12 +79,15 @@ const ProjectsSection = () => {
 
       <div className="project-container">
         {
-          projects.map(p => {
+          projects.length > 0 && projects.map(p => {
             return (<Project project={p} />)
           })
         }
-      </div>
 
+        {
+          projects.length === 0 && !loading && <h1>No Projects Found</h1>
+        }
+      </div>
 
     </div>
   )
