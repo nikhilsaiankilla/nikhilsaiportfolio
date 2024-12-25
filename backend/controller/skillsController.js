@@ -30,48 +30,65 @@ const getAllSkillsController = async (req, res) => {
 
 const addSkillsController = async (req, res) => {
     try {
+
+        console.log("adding skill started");
+        
         const skillsDataArray = req.body.name; // This should be an array of names
         const filesArray = req.files; // This will be an array of files
 
+        console.log("checking if array of skills");
         // Check if the input is an array (multiple skills)
         if (Array.isArray(skillsDataArray)) {
             const newSkills = [];
 
+            console.log("if array of skills then seperating them");
             // Validate each skill and its image
             for (const [index, name] of skillsDataArray.entries()) {
+
+                console.log("checking if name is there in individial skill array", index);
                 if (!name) {
                     return res.status(400).send({
                         status: "failed",
-                        message: `All fields are required for skill at index ${index}`,
+                        message: `Skill name is required at index ${index}`,
                     });
                 }
 
+                console.log("extracting file path for index ", index);
                 const imageLocalPath = filesArray[index]?.path;
 
                 if (!imageLocalPath) {
                     return res.status(400).send({
                         status: "failed",
-                        message: `Skill icon is required for the skill at index ${index}`,
+                        message: `Skill icon is required at index ${index}`,
                     });
                 }
 
+                console.log("uploading image to cloudinary for index ", index);
                 const skillIcon = await uploadOnCloudinary(imageLocalPath);
 
+                console.log("checking is the skills uploaded or not");
+                
                 if (!skillIcon) {
                     return res.status(500).send({
                         status: "failed",
-                        message: `Skill icon failed to upload for skill at index ${index}`,
+                        message: `Failed to upload skill icon at index ${index}`,
                     });
                 }
 
+                console.log("pushing individual skill into the newSkills Array");
+                
                 // Prepare the skill data with uploaded icon URL
                 const newSkill = { name, image_url: skillIcon.url };
                 newSkills.push(newSkill);
             }
 
+
+            console.log("creating multiple skills at once here");
+            
             // Create multiple skills at once
             const createdSkills = await Skills.bulkCreate(newSkills);
 
+            console.log("skills created successfully");
             return res.status(201).send({
                 status: "success",
                 message: "Skills added successfully",
@@ -80,14 +97,17 @@ const addSkillsController = async (req, res) => {
         } else {
             const { name } = req.body;
 
+            console.log('in individual skill section or this is else block');
             if (!name) {
                 return res.status(400).send({
                     status: "failed",
                     message: "Skill name is required",
                 });
             }
+
+            console.log('in individual skill section extracting local file path');
             const imageLocalPath = req.files[0]?.path; 
-            
+
             if (!imageLocalPath) {
                 return res.status(400).send({
                     status: "failed",
@@ -95,15 +115,19 @@ const addSkillsController = async (req, res) => {
                 });
             }
 
+            console.log("uploading to cloudinary in individual");
+            
             const skillIcon = await uploadOnCloudinary(imageLocalPath);
 
             if (!skillIcon) {
                 return res.status(500).send({
                     status: "failed",
-                    message: "Skill icon failed to upload",
+                    message: "Skill icon upload failed",
                 });
             }
 
+            console.log("creating new skill in individual");
+            
             // Create a single skill
             const newSkill = await Skills.create({ name, image_url: skillIcon.url });
 
@@ -114,7 +138,7 @@ const addSkillsController = async (req, res) => {
             });
         }
     } catch (error) {
-        console.error(error);
+        console.error("Error while adding skills:", error);
         return res.status(500).send({
             status: "failed",
             message: "An error occurred while adding the skill(s)",
@@ -122,6 +146,7 @@ const addSkillsController = async (req, res) => {
         });
     }
 };
+
 
 const deleteSkillsController = async (req, res) => {
     try {

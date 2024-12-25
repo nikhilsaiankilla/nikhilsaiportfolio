@@ -131,7 +131,7 @@ const addProjectsController = async (req, res) => {
 
 const updateProjectsController = async (req, res) => {
     try {
-        const { name, tagline, description, code_url, image_url, demo_url, skillIds } = req.body;
+        const { name, tagline, description, code_url, demo_url, skillIds } = req.body;
 
         const { id } = req.params;
 

@@ -49,7 +49,7 @@ const adminLoginController = async (req, res) => {
             })
         }
 
-        const token = JWT.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+        const token = JWT.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' });
 
         return res.status(200).send({
             message: "success",

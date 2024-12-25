@@ -1,45 +1,46 @@
+// server.js
+
+// Importing core modules and environment variables
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const colors = require('colors');
+
+// Importing database and routes
+const sequelize = require('./db/db');
 const adminRoutes = require('./routes/adminRoute');
 const skillsRoutes = require('./routes/skillRoute');
 const projectsRoutes = require('./routes/projectRoute');
 const contactRoutes = require('./routes/contactRoute');
-const authRoutes = require('./routes/authRoute')
+const authRoutes = require('./routes/authRoute');
 
-const colors = require('colors');
-
-const { Project, Skills } = require('./db/associations')
-const sequelize = require('./db/db')
-
+// Initializing Express app
 const app = express();
-const port = 8000;
-require('dotenv').config()
+const port = process.env.PORT || 8000;
 
-// Synchronize models with the database
-sequelize
-    .sync({ alter: true }) // Use `alter: true` to adjust schema
-    .then(() => {
-        console.log('Database synced'.magenta);
-    })
-    .catch((err) => {
-        console.log('Error syncing database:', err.red);
-    });
-
+// Middleware setup
 app.use(cors());
 app.use(bodyParser.json());
 
-// API routesw
+// Synchronize models with the database
+(async () => {
+    try {
+        await sequelize.sync({ alter: false });
+        console.log('Database synced'.magenta);
+    } catch (err) {
+        console.error('Error syncing database:', err.red);
+    }
+})();
+
+// Setting up routes
 app.use('/api/v1/auth', authRoutes);
-
 app.use('/api/v1', adminRoutes);
-
 app.use('/api/v1', skillsRoutes);
-
 app.use('/api/v1', projectsRoutes);
-
 app.use('/api/v1', contactRoutes);
 
+// Starting the server
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`.bgYellow.blue);
 });
