@@ -1,186 +1,216 @@
-import React, { useState } from "react";
-import "./style.scss";
+import { useRef, useState, useEffect } from 'react';
+import './style.scss';
+import ReactQuill from 'react-quill';
+import { toast } from 'react-hot-toast';
+import ContactLinks from '../../components/contactLinks/ContactLinks';
+import { useSelector } from 'react-redux'
 
 const AdminDashboard = () => {
-  // State for admin details
-  const [adminName, setAdminName] = useState("Admin Name");
-  const [adminEmail, setAdminEmail] = useState("admin@example.com");
-  const [adminPhone, setAdminPhone] = useState("+1234567890");
-  const [socialLinks, setSocialLinks] = useState({
-    linkedin: "#",
-    github: "#",
-    twitter: "#",
-  });
+  const [edit, setEdit] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [role, setRole] = useState('');
+  const [bio, setBio] = useState('');
+  const filePlaceholderRef = useRef(null);
+  const [resume, setResume] = useState(null);
+  const [socialLinks, setSocialLinks] = useState([]);
+  const [initialData, setInitialData] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  // State for skills and projects
-  const [skills, setSkills] = useState([{ name: "Skill 1", image: "https://img.mensxp.com/media/content/2024/Aug/Image-2_66af6a216fe00.jpeg?w=780&h=1554&cc=1" }]);
-  const [projects, setProjects] = useState([{ name: "Project 1", image: "https://img.mensxp.com/media/content/2024/Aug/Image-2_66af6a216fe00.jpeg?w=780&h=1554&cc=1" }]);
+  //token
+  const token = useSelector(state => state.auth.token);
+  console.log(token);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/user-profile');
+        const data = await response.json();
+        setName(data.name || '');
+        setEmail(data.email || '');
+        setPhone(data.phone || '');
+        setRole(data.role || '');
+        setBio(data.bio || '');
+        setSocialLinks(data.socialLinks || []);
+        setInitialData(data); // Store initial data
+      } catch (error) {
+        toast.error('Error fetching data');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // State for editing
-  const [isEditing, setIsEditing] = useState(false);
-  const [isEditingSkill, setIsEditingSkill] = useState(null);
-  const [isEditingProject, setIsEditingProject] = useState(null);
+    fetchData();
+  }, []);
 
-  // Function to handle editing admin details
-  const handleAdminEdit = () => {
-    setIsEditing(!isEditing);
+  const handleDesc = (e) => {
+    setBio(e);
   };
 
-  const handleSkillEdit = (index) => {
-    setIsEditingSkill(index);
+  const handleLinksUpdate = (updatedLinks) => {
+    setSocialLinks(updatedLinks);
   };
 
-  const handleProjectEdit = (index) => {
-    setIsEditingProject(index);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setResume(file);
+    if (file && filePlaceholderRef.current) {
+      filePlaceholderRef.current.textContent = file.name;
+    } else if (filePlaceholderRef.current) {
+      filePlaceholderRef.current.textContent = 'No file chosen';
+    }
   };
 
-  const handleSaveAdminDetails = () => {
-    setIsEditing(false);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    // Add only updated fields
+    if (name !== initialData.name) formData.append('name', name);
+    if (email !== initialData.email) formData.append('email', email);
+    if (phone !== initialData.phone) formData.append('phone', phone);
+    if (role !== initialData.role) formData.append('role', role);
+    if (bio !== initialData.bio) formData.append('bio', bio);
+
+    socialLinks.forEach((link, index) => {
+      if (link.trim() !== initialData.socialLinks?.[index]) {
+        formData.append('social_links', link);
+      }
+    });
+
+    if (resume instanceof File) {
+      formData.append('resume', resume);
+    }
+
+    // Log formData keys for debugging
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    // Submit form data to API
+    setEdit(false);
   };
 
-  const handleSaveSkill = (index, newName, newImage) => {
-    const updatedSkills = [...skills];
-    updatedSkills[index] = { name: newName, image: newImage };
-    setSkills(updatedSkills);
-    setIsEditingSkill(null);
-  };
-
-  const handleSaveProject = (index, newName, newImage) => {
-    const updatedProjects = [...projects];
-    updatedProjects[index] = { name: newName, image: newImage };
-    setProjects(updatedProjects);
-    setIsEditingProject(null);
+  const openSelectedResume = () => {
+    if (!resume) {
+      toast.error('No resume found');
+    } else {
+      toast.success('Opening resume');
+      window.open(resume, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
     <div className="admin-dashboard">
-      <div className="admin-profile">
-        <img
-          className="admin-profile__photo"
-          src="https://img.mensxp.com/media/content/2024/Aug/Image-2_66af6a216fe00.jpeg?w=780&h=1554&cc=1"
-          alt="Admin"
-        />
-        <div className="admin-profile__info">
-          {isEditing ? (
-            <div>
-              <input
-                type="text"
-                value={adminName}
-                onChange={(e) => setAdminName(e.target.value)}
-              />
-              <input
-                type="email"
-                value={adminEmail}
-                onChange={(e) => setAdminEmail(e.target.value)}
-              />
-              <input
-                type="tel"
-                value={adminPhone}
-                onChange={(e) => setAdminPhone(e.target.value)}
-              />
-              <input
-                type="url"
-                value={socialLinks.linkedin}
-                onChange={(e) => setSocialLinks({ ...socialLinks, linkedin: e.target.value })}
-                placeholder="LinkedIn"
-              />
-              <input
-                type="url"
-                value={socialLinks.github}
-                onChange={(e) => setSocialLinks({ ...socialLinks, github: e.target.value })}
-                placeholder="GitHub"
-              />
-              <input
-                type="url"
-                value={socialLinks.twitter}
-                onChange={(e) => setSocialLinks({ ...socialLinks, twitter: e.target.value })}
-                placeholder="Twitter"
-              />
-              <button onClick={handleSaveAdminDetails}>Save</button>
+      <h1 className="title">Admin Dashboard</h1>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="info">
+            <div className="input-div">
+              {edit ? (
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your name"
+                />
+              ) : (
+                <h4>{name || 'Enter Your Name'}</h4>
+              )}
             </div>
-          ) : (
-            <div>
-              <h2 className="admin-profile__name">{adminName}</h2>
-              <p className="admin-profile__email">{adminEmail}</p>
-              <p className="admin-profile__phone">{adminPhone}</p>
-              <div className="admin-profile__social-links">
-                <a href={socialLinks.linkedin} className="admin-profile__social-link">LinkedIn</a>
-                <a href={socialLinks.github} className="admin-profile__social-link">GitHub</a>
-                <a href={socialLinks.twitter} className="admin-profile__social-link">Twitter</a>
+
+            <div className="input-div">
+              {edit ? (
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                />
+              ) : (
+                <h4>{email || 'Enter Your Email'}</h4>
+              )}
+            </div>
+
+            <div className="input-div">
+              {edit ? (
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Enter your phone number"
+                />
+              ) : (
+                <h4>{phone || 'Enter Your Phone Number'}</h4>
+              )}
+            </div>
+
+            <div className="input-div">
+              {edit ? (
+                <input
+                  type="text"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  placeholder="Enter your professional role"
+                />
+              ) : (
+                <h4>{role || 'Enter your Professional Role'}</h4>
+              )}
+            </div>
+
+            <div className="editorContainer">
+              <label>Enter your Bio</label>
+              <ReactQuill
+                className="editor"
+                theme="snow"
+                value={bio}
+                onChange={handleDesc}
+              />
+            </div>
+
+            <div className="file-upload-container">
+              <div className="file-upload">
+                <input
+                  type="file"
+                  name="resume_url"
+                  id="image-upload"
+                  onChange={handleFileChange}
+                />
+                <label htmlFor="image-upload">Choose resume</label>
               </div>
-              <button onClick={handleAdminEdit}>{isEditing ? "Cancel" : "Edit"}</button>
+              <div ref={filePlaceholderRef} className="file-placeholder">
+                {!resume && 'No file chosen'}
+                {resume && (
+                  <button type="button" onClick={openSelectedResume}>
+                    View {resume.name}
+                  </button>
+                )}
+              </div>
             </div>
+
+            <ContactLinks onLinksChange={handleLinksUpdate} />
+          </div>
+          {edit && (
+            <button type="submit" className="submit-btn">
+              Save & Submit
+            </button>
           )}
-        </div>
-      </div>
-
-      <div className="skills-section">
-        <h3>Skills</h3>
-        <div className="skills-container">
-          {skills.map((skill, index) => (
-            <div className="skill" key={index}>
-              {isEditingSkill === index ? (
-                <div>
-                  <input
-                    type="text"
-                    defaultValue={skill.name}
-                    onChange={(e) => skill.name = e.target.value}
-                  />
-                  <input
-                    type="url"
-                    defaultValue={skill.image}
-                    onChange={(e) => skill.image = e.target.value}
-                  />
-                  <button onClick={() => handleSaveSkill(index, skill.name, skill.image)}>Save</button>
-                </div>
-              ) : (
-                <div>
-                  <img src={skill.image} alt={skill.name} />
-                  <p>{skill.name}</p>
-                  <button className="edit-btn" onClick={() => handleSkillEdit(index)}>Edit</button>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-        <button className="add-btn" onClick={() => setSkills([...skills, { name: "New Skill", image: "https://img.mensxp.com/media/content/2024/Aug/Image-2_66af6a216fe00.jpeg?w=780&h=1554&cc=1" }])}>
-          Add Skill
-        </button>
-      </div>
-
-      <div className="projects-section">
-        <h3>Projects</h3>
-        <div className="projects-container">
-          {projects.map((project, index) => (
-            <div className="project" key={index}>
-              {isEditingProject === index ? (
-                <div>
-                  <input
-                    type="text"
-                    defaultValue={project.name}
-                    onChange={(e) => project.name = e.target.value}
-                  />
-                  <input
-                    type="url"
-                    defaultValue={project.image}
-                    onChange={(e) => project.image = e.target.value}
-                  />
-                  <button onClick={() => handleSaveProject(index, project.name, project.image)}>Save</button>
-                </div>
-              ) : (
-                <div>
-                  <img src={project.image} alt={project.name} />
-                  <p>{project.name}</p>
-                  <button className="edit-btn" onClick={() => handleProjectEdit(index)}>Edit</button>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-        <button className="add-btn" onClick={() => setProjects([...projects, { name: "New Project", image: "https://img.mensxp.com/media/content/2024/Aug/Image-2_66af6a216fe00.jpeg?w=780&h=1554&cc=1" }])}>
-          Add New Project
-        </button>
-      </div>
+          {!edit && (
+            <button
+              type="button"
+              onClick={() => setEdit(true)}
+              className="edit-btn"
+            >
+              Edit
+            </button>
+          )}
+        </form>
+      )}
     </div>
   );
 };

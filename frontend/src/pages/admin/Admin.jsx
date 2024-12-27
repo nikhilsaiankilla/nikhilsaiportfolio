@@ -6,15 +6,16 @@ import { toast } from 'react-hot-toast'
 
 import { useDispatch } from 'react-redux';
 import { login } from '../../slicer/authSlice/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const sendLoginData = async (email, password) => {
     try {
@@ -36,14 +37,14 @@ const Admin = () => {
       }
 
       if (response?.status === 200) {
-        setData(response);
         toast.success('Login successful');
 
-        const token = response?.data?.token;
+        let token = response?.data?.token;
         dispatch(login({ token }));
         localStorage.setItem('authToken', token);
 
         token = undefined;
+        navigate('/admin/dashboard')
       }
     } catch (error) {
       console.error(error?.response?.data?.error);
@@ -83,7 +84,14 @@ const Admin = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className="login-btn" onClick={handleLogin}>{loading && "Loggig In please Wait" || !loading && "Login"}</button>
+        <button
+          type="submit"
+          className="login-btn"
+          onClick={handleLogin}
+        >
+          {loading ? "Logging In, please wait..." : "Login"}
+        </button>
+
       </div>
     </div>
   );

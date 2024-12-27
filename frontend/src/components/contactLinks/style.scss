@@ -1,0 +1,45 @@
+.contact-links-container {
+    width: 300px;
+    margin: auto;
+    text-align: center;
+
+    border: 4px solid #333;
+    border-radius: 20px;
+    padding: 1rem 2rem;
+
+    .links {
+        margin: 10px 0;
+
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+
+            input {
+                flex: 1;
+                padding: 5px;
+                margin-right: 10px;
+            }
+
+            .delete-btn {
+                background-color: #dc3545;
+                color: white;
+            }
+        }
+    }
+
+    button {
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .add-btn {
+        background-color: #28a745;
+        color: white;
+        font-size: 16px;
+        border-radius: 50%;
+    }
+}
