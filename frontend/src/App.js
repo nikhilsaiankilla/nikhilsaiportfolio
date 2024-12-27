@@ -12,6 +12,8 @@ import Admin from "./pages/admin/Admin";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import NavSlider from "./components/navbar/navSlider/NavSlider";
 import { Toaster } from "react-hot-toast";
+import AdminDashboard from "./pages/adminDashboard/AdminDashboard";
+import NewProjectPage from './pages/newProjectPage/NewProjectPage'
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Route path="/blog/:blogId" element={<Blog />} />
           <Route path="/project/:projectId" element={<Project />} />
           <Route path="/admin/login" element={<Admin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/newProject" element={<NewProjectPage />} />
           <Route path="*" element={<Error />} />
         </Routes>
         <FooterSection />

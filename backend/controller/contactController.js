@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { Contact } = require('../model/contactModel')
+const { Contact } = require('../model/contactModel');
 
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE,
@@ -57,14 +57,13 @@ const sendMessageController = async (req, res) => {
             `,
     };
 
-
     await transporter.sendMail(mailToSelf);
 
     const newEmail = await Contact.create({
       name: name,
       email: email,
       message: message
-    })
+    });
 
     // Send confirmation email to the user
     const mailToUser = {
@@ -81,7 +80,7 @@ const sendMessageController = async (req, res) => {
                     <p>Dear <strong>${name}</strong>,</p>
                     <p>Thank you for your message! I have received the following:</p>
                     <blockquote style="border-left: 4px solid #4CAF50; padding-left: 10px; margin: 15px 0; color: #555; font-style: italic;">
-                      "${message}" <!-- Replace with your message content variable if applicable -->
+                      "${message}"
                     </blockquote>
                     <p>I will review your message and contact you as soon as possible.</p>
                     <p>In the meantime, if you have any urgent concerns, feel free to reach out to me directly.</p>
@@ -96,44 +95,47 @@ const sendMessageController = async (req, res) => {
             `,
     };
 
-
     await transporter.sendMail(mailToUser);
 
     // Respond with success message
     return res.status(200).json({
-      success: false,
-      data: 'Your message has been sent. Nikhil will contact you soon. Thank you!'
+      success: true,
+      message: 'Your message has been sent. Nikhil will contact you soon. Thank you!'
     });
 
   } catch (error) {
+    console.error(error); // Log the error for debugging
+
     return res.status(500).json({
       success: false,
-      error: error || 'Failed to send message. Please try again later.'
+      error: error.message || 'Failed to send message. Please try again later.'
     });
   }
-}
+};
 
 const getAllMessages = async (req, res) => {
   try {
     const allMessages = await Contact.findAll();
 
-    if (allMessages.length == 0) {
+    if (allMessages.length === 0) {
       return res.status(404).send({
         success: false,
-        error: "no messages found"
-      })
+        error: "No messages found."
+      });
     }
 
     return res.status(200).send({
       success: true,
       data: allMessages
-    })
+    });
   } catch (error) {
-    return res.status(500).json({ 
+    console.error(error); // Log the error for debugging
+
+    return res.status(500).json({
       success: false,
-      error: error || 'Failed to send message. Please try again later.' 
+      error: error.message || 'Failed to retrieve messages. Please try again later.'
     });
   }
-}
+};
 
 module.exports = { sendMessageController, getAllMessages };

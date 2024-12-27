@@ -8,21 +8,30 @@ v2.config({
 });
 
 const uploadOnCloudinary = async (localFilePath) => {
+    if (!localFilePath) return null; 
+
     try {
-        if (!localFilePath) return null;
         const response = await v2.uploader.upload(localFilePath, {
             resource_type: "auto",
             folder: "portfolio",
         });
-        if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath);
-        return response;
-    } catch (error) {
-        console.error("Error uploading file to Cloudinary:", error);
-        try {
-            if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath);
-        } catch (deleteError) {
-            console.error("Error deleting local file after upload failure:", deleteError);
+        
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath);
         }
+
+        return response; 
+    } catch (error) {
+        console.error("Error uploading file to Cloudinary:", error.message || error);
+        
+        try {
+            if (fs.existsSync(localFilePath)) {
+                fs.unlinkSync(localFilePath);
+            }
+        } catch (deleteError) {
+            console.error("Error deleting local file after upload failure:", deleteError.message || deleteError);
+        }
+        
         return null;
     }
 };

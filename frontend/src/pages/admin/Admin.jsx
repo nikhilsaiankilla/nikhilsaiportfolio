@@ -4,6 +4,9 @@ import './style.scss';
 import axios from 'axios';
 import { toast } from 'react-hot-toast'
 
+import { useDispatch } from 'react-redux';
+import { login } from '../../slicer/authSlice/authSlice';
+
 const Admin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,22 +14,21 @@ const Admin = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
+
   const sendLoginData = async (email, password) => {
     try {
 
       setLoading(true);
-      const requestData = {
-        email: email,
-        password: password
-      };
 
       if (!email || !password) {
         return toast.error('Please fill all the fields');
       }
 
-      const apiUrl = process.env.REACT_APP_BACKEND_BASE_URL + '/login';
-
-      const response = await axios.post(apiUrl, requestData);
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/auth/login`, {
+        email: email,
+        password: password
+      });
 
       if (response.status === 404) {
         setLoading(false);
@@ -34,16 +36,18 @@ const Admin = () => {
       }
 
       if (response?.status === 200) {
-          setData(response?.data);
-          console.log(data);
-          toast.success('Login successful');
+        setData(response);
+        toast.success('Login successful');
+
+        const token = response?.data?.token;
+        dispatch(login({ token }));
+        localStorage.setItem('authToken', token);
+
+        token = undefined;
       }
     } catch (error) {
-      console.error('Error sending login data:', error);
-      if (error.response) {
-        console.error('Error response:', error.response.data);
-        toast.error(error.response.data.message);
-      }
+      console.error(error?.response?.data?.error);
+      toast.error(error?.response?.data?.error);
     }
     setLoading(false);
   };
@@ -79,7 +83,7 @@ const Admin = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className="login-btn" onClick={handleLogin}>Login</button>
+        <button type="submit" className="login-btn" onClick={handleLogin}>{loading && "Loggig In please Wait" || !loading && "Login"}</button>
       </div>
     </div>
   );

@@ -11,15 +11,7 @@ import { project1, gpt, spotify, portfolio, ecom, blog, moviesApp } from '../../
 
 const ProjectsSection = () => {
 
-  const { loading, data, error } = useFetch('/getAllSkills');
-
-  if (error) {
-    console.log(error);
-  }
-
-  if (data) {
-    console.log(data);
-  }
+  // const { loading, data, error } = useFetch('/getAllSkills');
 
   let projects = [
     {
@@ -84,9 +76,9 @@ const ProjectsSection = () => {
           })
         }
 
-        {
+        {/* {
           projects.length === 0 && !loading && <h1>No Projects Found</h1>
-        }
+        } */}
       </div>
 
     </div>

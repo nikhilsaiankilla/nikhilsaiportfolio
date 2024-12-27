@@ -1,6 +1,6 @@
 const { MyData } = require('../model/adminModel');
-const bcrypt = require('bcrypt')
-const JWT = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+const JWT = require('jsonwebtoken');
 
 const adminLoginController = async (req, res) => {
     try {
@@ -31,28 +31,31 @@ const adminLoginController = async (req, res) => {
             });
         }
 
+        // Check if user exists in the database
         const user = await MyData.findOne({ where: { email } });
 
         if (!user) {
             return res.status(404).send({
                 success: false,
-                error: "user not found"
-            })
+                error: "User not found."
+            });
         }
 
+        // Compare password with hashed password stored in DB
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(401).send({
                 success: false,
-                error: "invalid credentials"
-            })
+                error: "Invalid credentials."
+            });
         }
 
+        // Create JWT token
         const token = JWT.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1d' });
 
         return res.status(200).send({
-            message: "success",
+            success: true,
             token,
             user: {
                 id: user.id,
@@ -62,11 +65,29 @@ const adminLoginController = async (req, res) => {
         });
 
     } catch (error) {
+        // Log the error for debugging
+        console.error(error);
+
+        // Check for specific errors
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(500).send({
+                success: false,
+                error: "Error generating JWT token."
+            });
+        }
+
+        if (error instanceof bcrypt.BcryptError) {
+            return res.status(500).send({
+                success: false,
+                error: "Error comparing passwords."
+            });
+        }
+
         return res.status(500).send({
             success: false,
-            error: error || "something went wrong while logging to your account"
+            error: "Something went wrong while logging into your account."
         });
     }
-}
+};
 
-module.exports = { adminLoginController }
+module.exports = { adminLoginController };

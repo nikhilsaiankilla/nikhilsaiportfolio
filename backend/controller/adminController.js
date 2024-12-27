@@ -1,34 +1,39 @@
 const bcrypt = require('bcrypt');
-
-const { generateOTP, sendOTPEmail } = require('../utils/otpUtils')
-
-const { MyData } = require('../model/adminModel')
+const { generateOTP, sendOTPEmail } = require('../utils/otpUtils');
+const { MyData } = require('../model/adminModel');
+const { uploadOnCloudinary } = require('./../utils/cloudinary')
 
 const getAdminDataController = async (req, res) => {
     try {
         const data = await MyData.findAll();
 
-        return res.status(500).send({
+        if (data.length < 1) {
+            return res.status(404).send({
+                success: false,
+                error: "admin data not found",
+            });
+        }
+        return res.status(200).send({
             success: true,
-            data: data
-        })
+            data: data,
+        });
     } catch (error) {
         return res.status(500).send({
             success: false,
-            error: error || "something went wrong while fetching the admin"
+            error: error.message || "Something went wrong while fetching the admin data.",
         });
     }
 };
 
 const createAdminController = async (req, res) => {
     try {
-        const { name, email, password, phone, role, social_links, resume, bio } = req.body;
+        const { name, email, password, phone, role, social_links, bio } = req.body;
 
         // Validation checks
-        if (!name || !email || !password || !phone || !role || !social_links) {
+        if (!name || !email || !password || !phone || !role || !social_links || !bio) {
             return res.status(400).send({
                 success: false,
-                error: "Name, email, password, phone, role, and social_links are required."
+                error: "Name, email, password, phone, role, and social_links are required.",
             });
         }
 
@@ -37,7 +42,16 @@ const createAdminController = async (req, res) => {
         if (!emailRegex.test(email)) {
             return res.status(400).send({
                 success: false,
-                error: "Please provide a valid email address."
+                error: "Please provide a valid email address.",
+            });
+        }
+
+        const user = await MyData.findOne({ where: { email } });
+
+        if (user) {
+            return res.status(400).send({
+                success: false,
+                error: "user already exist please login to your account",
             });
         }
 
@@ -45,44 +59,57 @@ const createAdminController = async (req, res) => {
         if (password.length < 8) {
             return res.status(400).send({
                 success: false,
-                error: "Password must be at least 8 characters long."
+                error: "Password must be at least 8 characters long.",
             });
         }
 
         // Validate phone number (only digits and reasonable length)
-        const phoneRegex = /^[0-9]{10}$/; // assuming 10-digit phone number
+        const phoneRegex = /^[0-9]{10}$/;
         if (!phoneRegex.test(phone)) {
             return res.status(400).send({
                 success: false,
-                error: "Please provide a valid 10-digit phone number."
+                error: "Please provide a valid 10-digit phone number.",
             });
         }
 
         // Validate social_links (ensure it's a valid URL or array of URLs)
-        try {
-            if (Array.isArray(social_links)) {
-                social_links.forEach(link => {
-                    const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]+)*\/?$/;
-                    if (!urlRegex.test(link)) {
-                        throw new Error("Invalid URL in social_links");
-                    }
-                });
-            } else {
-                return res.status(400).send({
-                    success: false,
-                    error: "social_links should be an array of valid URLs."
-                });
-            }
-        } catch (err) {
+        if (!Array.isArray(social_links)) {
             return res.status(400).send({
                 success: false,
-                error: err || "something went wrong while evaluating the social links"
+                error: "social_links should be an array of valid URLs.",
             });
         }
 
+        social_links.forEach((link) => {
+            const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]+)*\/?$/;
+            if (!urlRegex.test(link)) {
+                return res.status(400).send({
+                    success: false,
+                    error: "Invalid URL in social_links.",
+                });
+            }
+        });
+
         const saltRounds = 10;
-        // Hash password asynchronously
         const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        const resumeFile = req?.file?.path;
+
+        if (!resumeFile) {
+            return res.status(500).send({
+                success: false,
+                error: "resume not found please try again",
+            });
+        }
+
+        const isResumeUploaded = await uploadOnCloudinary(resumeFile);
+
+        if (!isResumeUploaded) {
+            return res.status(500).send({
+                success: false,
+                error: "Something went wrong while uploading the resume.",
+            });
+        }
 
         const newAdmin = await MyData.create({
             name,
@@ -91,7 +118,7 @@ const createAdminController = async (req, res) => {
             phone,
             role,
             social_links: JSON.stringify(social_links),
-            profile_resume: resume,
+            profile_resume: isResumeUploaded?.url,
             bio,
         });
 
@@ -99,11 +126,10 @@ const createAdminController = async (req, res) => {
             success: true,
             data: newAdmin,
         });
-
     } catch (error) {
         return res.status(500).send({
             success: false,
-            error: error || "something went wrong while creating admin",
+            error: error || "Something went wrong while creating admin.",
         });
     }
 };
@@ -116,7 +142,7 @@ const updateAdminController = async (req, res) => {
         if (!email) {
             return res.status(400).send({
                 success: false,
-                error: "Please provide the email of the admin to update."
+                error: "Please provide the email of the admin to update.",
             });
         }
 
@@ -125,7 +151,25 @@ const updateAdminController = async (req, res) => {
         if (!admin) {
             return res.status(404).send({
                 success: false,
-                error: "No admin found with the provided email."
+                error: "No admin found with the provided email.",
+            });
+        }
+
+        const resumeFile = req?.file?.path;
+
+        if (!resumeFile) {
+            return res.status(500).send({
+                success: false,
+                error: "resume not found please try again",
+            });
+        }
+
+        const isResumeUploaded = await uploadOnCloudinary(resumeFile);
+
+        if (!isResumeUploaded) {
+            return res.status(500).send({
+                success: false,
+                error: "Something went wrong while uploading the resume.",
             });
         }
 
@@ -134,14 +178,14 @@ const updateAdminController = async (req, res) => {
         if (phone) updates.phone = phone;
         if (role) updates.role = role;
         if (social_links) updates.social_links = JSON.stringify(social_links);
-        if (resume) updates.profile_resume = resume;
+        if (isResumeUploaded) updates.profile_resume = isResumeUploaded?.url;
         if (bio) updates.bio = bio;
 
-        //return if there are no updates
+        // Return if there are no updates
         if (Object.keys(updates).length === 0) {
             return res.status(400).send({
                 success: false,
-                error: "At least one field (other than password) must be provided for updating."
+                error: "At least one field (other than password) must be provided for updating.",
             });
         }
 
@@ -149,13 +193,12 @@ const updateAdminController = async (req, res) => {
 
         return res.status(200).send({
             success: true,
-            data: updatedAdmin
+            data: updatedAdmin,
         });
-
     } catch (error) {
         return res.status(500).send({
             success: false,
-            error: error || "something went wrong while updating the admin data"
+            error: error || "Something went wrong while updating the admin data.",
         });
     }
 };
@@ -168,7 +211,7 @@ const updatePasswordController = async (req, res) => {
         if (!email || !newPassword || !confirmPassword) {
             return res.status(400).send({
                 success: false,
-                error: "Please provide email, new password, and confirm password."
+                error: "Please provide email, new password, and confirm password.",
             });
         }
 
@@ -176,17 +219,16 @@ const updatePasswordController = async (req, res) => {
         if (newPassword !== confirmPassword) {
             return res.status(400).send({
                 success: false,
-                error: "The new password and confirmation password must match."
+                error: "The new password and confirmation password must match.",
             });
         }
 
-        // Validate the new password strength
+        // Validate password strength
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
         if (!passwordPattern.test(newPassword)) {
             return res.status(400).send({
                 success: false,
-                error: "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character."
+                error: "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.",
             });
         }
 
@@ -196,14 +238,12 @@ const updatePasswordController = async (req, res) => {
         if (!admin) {
             return res.status(404).send({
                 success: false,
-                error: "No admin found with the provided email."
+                error: "No admin found with the provided email.",
             });
         }
 
         const saltRounds = 10;
-
-        // Hash password asynchronously
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
         const user = await admin.update({ password: hashedPassword });
 
@@ -211,12 +251,12 @@ const updatePasswordController = async (req, res) => {
 
         return res.status(200).send({
             success: true,
-            data: user
+            data: user,
         });
     } catch (error) {
         return res.status(500).send({
             success: false,
-            error: error || "something went wrong while updating password"
+            error: error.message || "Something went wrong while updating password.",
         });
     }
 };
@@ -229,34 +269,39 @@ const forgetPasswordController = async (req, res) => {
 
         if (!admin) {
             return res.status(404).send({
-                success: true,
-                error: "admin not found"
+                success: false,
+                error: "Admin not found.",
+            });
+        }
+
+        // Check if there's an active OTP for the admin
+        if (admin.otp && new Date() < new Date(admin.otp_expiration)) {
+            return res.status(400).send({
+                success: false,
+                error: "An OTP has already been sent. Please wait until it expires before requesting a new one.",
             });
         }
 
         // Generate OTP
         const otp = generateOTP();
         const otpExpiry = new Date();
-
-        // OTP valid for 10 minutes
-        otpExpiry.setMinutes(otpExpiry.getMinutes() + 10);
+        otpExpiry.setMinutes(otpExpiry.getMinutes() + 10); // OTP valid for 10 minutes
 
         admin.otp = otp;
         admin.otp_expiration = otpExpiry;
         await admin.save();
 
         // Send OTP to user email
-        const data = await sendOTPEmail(email, otp);
+        await sendOTPEmail(email, otp);
 
         return res.status(200).send({
-            success: false,
-            data: data
+            success: true,
+            data: "OTP sent successfully.",
         });
     } catch (error) {
-
         return res.status(500).send({
             success: false,
-            error: error || "something went wrong while resetting password" 
+            error: error.message || "Something went wrong while resetting password.",
         });
     }
 };
@@ -270,44 +315,44 @@ const resetPasswordController = async (req, res) => {
         if (!admin) {
             return res.status(404).send({
                 success: false,
-                error: "Email not found."
+                error: "Email not found.",
             });
         }
 
         if (admin.otp !== parseInt(otp, 10)) {
             return res.status(400).send({
                 success: false,
-                error: "Invalid OTP."
+                error: "Invalid OTP.",
             });
         }
 
         if (new Date() > new Date(admin.otp_expiration)) {
             return res.status(400).send({
                 success: false,
-                error: "OTP has expired."
+                error: "OTP has expired.",
             });
         }
 
         const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(newPassword, saltRounds)
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
         // Update password
         admin.password = hashedPassword;
         admin.otp = null;
-        admin.otpExpiry = null;
+        admin.otp_expiration = null;
         const updatedData = await admin.save();
 
-        return res.status(200).send({ 
-            success: false,
-            data: updatedData 
-        })
+        return res.status(200).send({
+            success: true,
+            data: updatedData,
+        });
     } catch (error) {
-        return res.status(500).send({ 
+        return res.status(500).send({
             success: false,
-            error: error || "something went wrong while resetting password"
+            error: error.message || "Something went wrong while resetting password.",
         });
     }
-}
+};
 
 module.exports = {
     getAdminDataController,
@@ -315,5 +360,5 @@ module.exports = {
     updateAdminController,
     updatePasswordController,
     forgetPasswordController,
-    resetPasswordController
-}
+    resetPasswordController,
+};

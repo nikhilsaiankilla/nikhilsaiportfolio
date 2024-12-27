@@ -15,6 +15,8 @@ const projectsRoutes = require('./routes/projectRoute');
 const contactRoutes = require('./routes/contactRoute');
 const authRoutes = require('./routes/authRoute');
 
+const { defineAssociations } = require('./db/associations');
+
 // Initializing Express app
 const app = express();
 const port = process.env.PORT || 8000;
@@ -23,13 +25,16 @@ const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Synchronize models with the database
 (async () => {
     try {
-        await sequelize.sync({ alter: false });
+        await sequelize.authenticate();
+        console.log('Database connected successfully'.green);
+        defineAssociations();
+        await sequelize.sync({ alter: true });
         console.log('Database synced'.magenta);
     } catch (err) {
-        console.error('Error syncing database:', err.red);
+        console.error('Database connection failed:', err.red);
+        process.exit(1);
     }
 })();
 
@@ -42,5 +47,5 @@ app.use('/api/v1', contactRoutes);
 
 // Starting the server
 app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`.bgYellow.blue);
+    console.log(`Server running on http://localhost:${port}`.blue);
 });
