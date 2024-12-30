@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
 import './style.scss';
+import { useSelector } from "react-redux";
 
 const SkillsSelector = ({ onSkillSelect }) => {
   const [selectedSkills, setSelectedSkills] = useState([]);
 
-  const skills = [
-    { id: 1, name: "React" },
-    { id: 2, name: "Node.js" },
-    { id: 3, name: "Express" },
-    { id: 4, name: "MySQL" },
-    { id: 5, name: "CSS" },
-    { id: 6, name: "JavaScript" },
-  ];
+  const skills = useSelector(state => state.navSlider.skills);
 
   const toggleSkill = (skill, event) => {
     event.preventDefault();
@@ -22,22 +16,22 @@ const SkillsSelector = ({ onSkillSelect }) => {
         : [...prev, skill.id]
     );
   };
-  
+
   useEffect(() => {
     onSkillSelect(selectedSkills);
   }, [selectedSkills, onSkillSelect]);
 
   return (
     <div className="skills-container">
-      {skills.map((skill) => (
+      {skills.length > 0 ? skills.map((skill) => (
         <button
-          key={skill.id}
+          key={skill?.id}
           className={`skill ${selectedSkills.includes(skill.id) ? "selected" : ""}`}
           onClick={(event) => toggleSkill(skill, event)}
         >
-          {skill.name}
+          {skill?.name}
         </button>
-      ))}
+      )) : "no skills found please add skills"}
     </div>
   );
 };

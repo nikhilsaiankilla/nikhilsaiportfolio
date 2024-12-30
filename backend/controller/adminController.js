@@ -13,6 +13,12 @@ const getAdminDataController = async (req, res) => {
                 error: "admin data not found",
             });
         }
+
+        const responseData = data.map(item => {
+            const { password, ...rest } = item.dataValues;
+            return rest;
+        });
+
         return res.status(200).send({
             success: true,
             data: data,
@@ -136,7 +142,7 @@ const createAdminController = async (req, res) => {
 
 const updateAdminController = async (req, res) => {
     try {
-        const { email, name, phone, role, social_links, resume, bio } = req.body;
+        const { email, name, phone, role, social_links, bio } = req.body;
 
         // Ensure email is provided to identify the record
         if (!email) {
@@ -155,31 +161,26 @@ const updateAdminController = async (req, res) => {
             });
         }
 
-        const resumeFile = req?.file?.path;
-
-        if (!resumeFile) {
-            return res.status(500).send({
-                success: false,
-                error: "resume not found please try again",
-            });
-        }
-
-        const isResumeUploaded = await uploadOnCloudinary(resumeFile);
-
-        if (!isResumeUploaded) {
-            return res.status(500).send({
-                success: false,
-                error: "Something went wrong while uploading the resume.",
-            });
-        }
-
         const updates = {};
         if (name) updates.name = name;
         if (phone) updates.phone = phone;
         if (role) updates.role = role;
         if (social_links) updates.social_links = JSON.stringify(social_links);
-        if (isResumeUploaded) updates.profile_resume = isResumeUploaded?.url;
         if (bio) updates.bio = bio;
+
+        const resumeFile = req?.file?.path;
+
+        if (resumeFile) {
+            const isResumeUploaded = await uploadOnCloudinary(resumeFile);
+            if (!isResumeUploaded) {
+                return res.status(500).send({
+                    success: false,
+                    error: "Something went wrong while uploading the resume.",
+                });
+            }
+
+            if (isResumeUploaded) updates.profile_resume = isResumeUploaded?.url;
+        }
 
         // Return if there are no updates
         if (Object.keys(updates).length === 0) {

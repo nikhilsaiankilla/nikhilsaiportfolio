@@ -14,7 +14,7 @@ const Project = sequelize.define(
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    tagline:{
+    tagline: {
       type: DataTypes.STRING(255),
       allowNull: false
     },
@@ -33,6 +33,10 @@ const Project = sequelize.define(
     image_url: {
       type: DataTypes.STRING(255),
       allowNull: true,
+    },
+    star: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     created_at: {
       type: DataTypes.DATE,

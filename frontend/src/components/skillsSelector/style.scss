@@ -7,6 +7,7 @@
 
   border: 2px solid gray;
   border-radius: 15px;
+  color: white;
 
   .skill {
     padding: 0.5rem 1rem;
@@ -25,7 +26,7 @@
     }
 
     &.selected {
-      border-color: white;
+      border-color: rgb(35, 238, 76);
       transform: scale(1.05);
     }
   }

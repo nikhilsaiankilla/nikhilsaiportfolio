@@ -2,13 +2,12 @@ import './style.scss'
 
 //Importing Icons
 import { FaXTwitter } from "react-icons/fa6";
-import { FaGithub, FaLinkedinIn, FaFileDownload } from "react-icons/fa";
-import pdf from "./../../assests/resume/resume.pdf"
+import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 
 //Importing Components
 import { Link } from 'react-router-dom';
 
-const HeroSection = () => {
+const HeroSection = ({ user }) => {
   const gridBox = [];
   for (let index = 0; index < 100; index++) {
     gridBox.push(<span className='grid-block' key={index}></span>)
@@ -20,8 +19,8 @@ const HeroSection = () => {
       </div>
       <div className="text-container">
         <h4>Hey I'm your</h4>
-        <h1>Full Stack developer</h1>
-        <a href={pdf} download className='download-pdf'>Download Resume <FaFileDownload /></a>
+        <h1>Software Developer</h1>
+        <a href={user?.profile_resume} className='download-pdf'>view My Resume</a>
       </div>
       <div className="icon-container">
         <span className="line"></span>

@@ -2,8 +2,11 @@ import { useRef, useState, useEffect } from 'react';
 import './style.scss';
 import ReactQuill from 'react-quill';
 import { toast } from 'react-hot-toast';
-import ContactLinks from '../../components/contactLinks/ContactLinks';
 import { useSelector } from 'react-redux'
+import axios from 'axios';
+
+import ContactLinks from '../../components/contactLinks/ContactLinks';
+import AddSkills from '../../components/addSkills/AddSkills'
 
 const AdminDashboard = () => {
   const [edit, setEdit] = useState(false);
@@ -20,28 +23,54 @@ const AdminDashboard = () => {
 
   //token
   const token = useSelector(state => state.auth.token);
-  console.log(token);
-  
+
+  const handleUpdateAdminApi = async (formData) => {
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_BACKEND_BASE_URL}/updateAdminData`, formData, {
+        headers: {
+          "Authorization": "bearer " + token,
+          "Content-Type": "multipart/form-data",
+        }
+      });
+
+      if (response.status !== 200) {
+        return toast.error('something went wrong');
+      }
+      toast.success('updated the admin data');
+    } catch (error) {
+      console.log(error);
+      toast.error('something went wrong.')
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch('/api/user-profile');
-        const data = await response.json();
-        setName(data.name || '');
-        setEmail(data.email || '');
-        setPhone(data.phone || '');
-        setRole(data.role || '');
-        setBio(data.bio || '');
-        setSocialLinks(data.socialLinks || []);
-        setInitialData(data); // Store initial data
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/getAdmin`);
+
+        if (response.status !== 200) {
+          return toast.error('something went wrong unable to fetch data');
+        }
+
+        const data = response?.data?.data[0];
+
+        setName(data?.name || '');
+        setEmail(data?.email || '');
+        setPhone(data?.phone || '');
+        setRole(data?.role || '');
+        setBio(data?.bio || '');
+        setSocialLinks((JSON.parse(data?.social_links) || data?.social_links) || []);
+        setResume(data?.profile_resume || null);
+        setInitialData(data);
+
+        toast.success('data fetched successfully')
       } catch (error) {
         toast.error('Error fetching data');
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -67,10 +96,9 @@ const AdminDashboard = () => {
     e.preventDefault();
 
     const formData = new FormData();
+    formData.append("email", email)
 
-    // Add only updated fields
     if (name !== initialData.name) formData.append('name', name);
-    if (email !== initialData.email) formData.append('email', email);
     if (phone !== initialData.phone) formData.append('phone', phone);
     if (role !== initialData.role) formData.append('role', role);
     if (bio !== initialData.bio) formData.append('bio', bio);
@@ -82,15 +110,10 @@ const AdminDashboard = () => {
     });
 
     if (resume instanceof File) {
-      formData.append('resume', resume);
+      formData.append('resume_url', resume);
     }
 
-    // Log formData keys for debugging
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
-    // Submit form data to API
+    handleUpdateAdminApi(formData);
     setEdit(false);
   };
 
@@ -129,6 +152,7 @@ const AdminDashboard = () => {
                 <input
                   type="email"
                   value={email}
+                  readOnly
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                 />
@@ -169,6 +193,7 @@ const AdminDashboard = () => {
                 className="editor"
                 theme="snow"
                 value={bio}
+                readOnly={!edit}
                 onChange={handleDesc}
               />
             </div>
@@ -187,17 +212,17 @@ const AdminDashboard = () => {
                 {!resume && 'No file chosen'}
                 {resume && (
                   <button type="button" onClick={openSelectedResume}>
-                    View {resume.name}
+                    View resume
                   </button>
                 )}
               </div>
             </div>
 
-            <ContactLinks onLinksChange={handleLinksUpdate} />
+            <ContactLinks onLinksChange={handleLinksUpdate} sLinks={socialLinks} />
           </div>
           {edit && (
             <button type="submit" className="submit-btn">
-              Save & Submit
+              {loading ? "submitting." : "Submit"}
             </button>
           )}
           {!edit && (
@@ -211,6 +236,7 @@ const AdminDashboard = () => {
           )}
         </form>
       )}
+      <AddSkills/>
     </div>
   );
 };

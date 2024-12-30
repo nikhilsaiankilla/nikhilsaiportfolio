@@ -69,7 +69,7 @@ const getProjectController = async (req, res) => {
 
 const addProjectsController = async (req, res) => {
     try {
-        const { name, tagline, demo_url, code_url, description, skillIds } = req.body;
+        const { name, tagline, demo_url, code_url, description, skillIds, star } = req.body;
 
         if (!name || !tagline || !description || !demo_url || !code_url) {
             return res.status(400).send({
@@ -103,6 +103,7 @@ const addProjectsController = async (req, res) => {
             demo_url,
             code_url,
             image_url: projectThumbnail.url,
+            star : star || false,
         });
 
         if (skillIds && skillIds.length > 0) {
@@ -133,7 +134,7 @@ const addProjectsController = async (req, res) => {
 
 const updateProjectsController = async (req, res) => {
     try {
-        const { name, tagline, description, code_url, demo_url, skillIds } = req.body;
+        const { name, tagline, description, code_url, demo_url, skillIds, star } = req.body;
         const { id } = req.params;
 
         if (!id) {
@@ -158,6 +159,7 @@ const updateProjectsController = async (req, res) => {
         if (description) updates.description = description;
         if (code_url) updates.code_url = code_url;
         if (demo_url) updates.demo_url = demo_url;
+        if(star) updates.star = star;
 
         const imageLocalPath = req?.file?.path;
 

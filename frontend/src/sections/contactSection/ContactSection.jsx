@@ -1,57 +1,68 @@
-import emailjs from '@emailjs/browser';
-import PageTitle from '../../components/pageTitle/PageTitle'
-import { useRef } from 'react';
 import { useState } from 'react';
-
+import PageTitle from '../../components/pageTitle/PageTitle'
 import './style.scss'
+import axios from 'axios';
+import { toast } from 'react-hot-toast'
 
 const ContactSection = () => {
-  const form = useRef();
-  const [status, setStatus] = useState('');
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [message, setMessage] = useState();
+  const [loading, setLoading] = useState(false);
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
 
-    emailjs
-      .sendForm('service_1uhqref', 'template_hfxjk4i', form.current, 'ah_t0Bdumhr9niCrl')
-      .then(
-        (result) => {
-          console.log(result.text);
-          setStatus('success');
-          setTimeout(() => setStatus(''), 5000);
-        },
-        (error) => {
-          console.error(error.text);
-          setStatus('error');
-          setTimeout(() => setStatus(''), 5000);
-        }
-      );
+    if (!name) {
+      return toast.error('please enter your name');
+    }
 
+    if (!email) {
+      return toast.error('please enter your email');
+    }
 
+    if (!message) {
+      return toast.error('please enter your message');
+    }
+
+    const sendData = {
+      email,
+      name,
+      message
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/sendMessage`, sendData);
+
+      if (response.status !== 200) {
+        return toast.error('something went wrong');
+      }
+      toast.success('message sent successfully');
+      setEmail(null);
+      setName(null);
+      setMessage(null)
+    } catch (error) {
+      console.log(error);
+      toast.error('something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className='contact-section' id='ContactSection'>
       <PageTitle title='contact me' color='white' />
-      <form ref={form} onSubmit={(event) => {
+      <form onSubmit={(event) => {
         sendEmail(event)
       }}>
-        <input type="text" name='user_name' className='user_name' required placeholder='Enter your name' />
-        <input type="email" name='user_email' className='user_email' required placeholder='Enter your email' />
-        <input type="text" name="user_message" className='user_message' required placeholder='Enter your message' />
-        <button type='submit' className='submit-btn'>Send</button>
-
-        {status === 'success' && <p>Hey, your message has been sent!</p>}
-        {status === 'error' && <p>Sorry, something went wrong. Please try again.</p>}
+        <input type="text" name='user_name' className='user_name' required placeholder='Enter your name' value={name} onChange={(e) => setName(e.target.value)} />
+        <input type="email" name='user_email' className='user_email' required placeholder='Enter your email' value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="text" name="user_message" className='user_message' required placeholder='Enter your message'value={message} onChange={(e) => setMessage(e.target.value)} />
+        <button type='submit' className='submit-btn'>{loading ? "Sending.." : "Send"}</button>
       </form>
     </div>
   )
 }
 
-
-
-
-// user_name
-// user_email
-// user_message
-export default ContactSection
+export default ContactSection;

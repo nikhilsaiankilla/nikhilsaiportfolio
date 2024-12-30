@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import './style.scss';
 
-const ContactLinks = ({ onLinksChange }) => {
-  const [links, setLinks] = useState([]);
-
+const ContactLinks = ({ onLinksChange, sLinks }) => {
+  const [links, setLinks] = useState(sLinks);
+  
   const addLink = () => {
     const updatedLinks = [...links, ''];
     setLinks(updatedLinks);
@@ -18,7 +18,7 @@ const ContactLinks = ({ onLinksChange }) => {
     const updatedLinks = links.map((link, i) => (i === index ? newUrl : link));
     setLinks(updatedLinks);
   };
-  
+
   useEffect(() => {
     onLinksChange(links);
   }, [links, onLinksChange]);
@@ -36,6 +36,7 @@ const ContactLinks = ({ onLinksChange }) => {
               placeholder="Enter link URL"
             />
             <button
+              type="button"
               className="delete-btn"
               onClick={() => deleteLink(index)}
               title="Delete Link"
@@ -45,7 +46,7 @@ const ContactLinks = ({ onLinksChange }) => {
           </div>
         ))}
       </div>
-      <button className="add-btn" onClick={addLink}>
+      <button type="button" className="add-btn" onClick={addLink}>
         +
       </button>
     </div>

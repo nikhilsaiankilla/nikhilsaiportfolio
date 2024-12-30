@@ -3,30 +3,30 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { toast } from 'react-hot-toast'
 
 import "./style.scss";
 import SkillsSelector from "../../components/skillsSelector/SkillsSelector";
+import { useNavigate } from "react-router-dom";
 
 const NewProjectPage = () => {
-    const [description, setDescription] = useState("");
     const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const [tagline, setTagline] = useState("");
     const [demo_url, setDemoUrl] = useState("");
     const [code_url, setCodeUrl] = useState("");
     const [skills, setSkills] = useState([]);
     const [image, setImage] = useState(null);
     const filePlaceholderRef = useRef(null)
+    const [starProject, setStarProject] = useState(false);
 
-    const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
 
     const token = useSelector((state) => state.auth.token);
+    const navigate = useNavigate();
 
     const postProjectToServer = async (formData) => {
         setLoading(true);
-        setError(null);
-
         try {
             const response = await axios.post(
                 process.env.REACT_APP_BACKEND_BASE_URL + "/addProjects",
@@ -39,17 +39,26 @@ const NewProjectPage = () => {
                 }
             );
             if (response.status === 200) {
-                setData(response.data);
-                alert('Project uploaded successfully!');
+                toast.success("Project uploaded successfully!")
+                setName(null);
+                setTagline(null);
+                setDescription(null);
+                setDemoUrl(null);
+                setCodeUrl(null);
+                setImage(null);
+                setSkills([]);
+                setStarProject(null);
+                filePlaceholderRef.current.textContent = "No file chosen";
+
+                const id = response?.data?.data?.id;
+
+                navigate(`/project/${id}`)
             }
-            console.log(response);
         } catch (error) {
-            console.error(error);
-            setError(error.response ? error.response.data : "Something went wrong!");
+            toast.error(error.response ? error.response.data : "Something went wrong!")
         }
         setLoading(false);
     }
-
 
     const handleDesc = (e) => {
         setDescription(e);
@@ -75,7 +84,7 @@ const NewProjectPage = () => {
         formData.append("description", description);
         formData.append("demo_url", demo_url);
         formData.append("code_url", code_url);
-        formData.append("image_url", image); 
+        formData.append("image_url", image);
 
         skills.forEach((skill, index) => {
             formData.append(`skillIds`, skill);
@@ -91,6 +100,11 @@ const NewProjectPage = () => {
     const handleSkillSelect = (selectedSkills) => {
         setSkills(selectedSkills);
     };
+
+    const handleClick = () => {
+        setStarProject(!starProject);
+    };
+
 
     return (
         <div className="new-project-page">
@@ -150,7 +164,21 @@ const NewProjectPage = () => {
                         No file chosen
                     </div>
                 </div>
-                <button type="submit" >{!loading && "Upload" || loading && "uploading...!"}</button>
+                <button
+                    type="button" // Explicitly specify the type to prevent form submission
+                    onClick={handleClick}
+                    style={{
+                        backgroundColor: starProject ? "goldenrod" : "lightgray",
+                        color: starProject ? "white" : "black",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                    }}
+                >
+                    {starProject ? "Unmark as star" : "Mark it as star"}
+                </button>
+                <button type="submit" >{loading === true ? "loading.." : "upload"}</button>
             </form>
         </div>
     );
