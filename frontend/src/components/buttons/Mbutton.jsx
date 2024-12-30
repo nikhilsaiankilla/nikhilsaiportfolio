@@ -23,8 +23,8 @@ const Mbutton = ({ button, link, navigationLink, deleteProject }) => {
                         "Authorization": "bearer " + token
                     }
                 })
-    
-                if(response.status === 200){
+
+                if (response.status === 200) {
                     toast.remove(toastId);
 
                     toast.success('project deleted successfully');
@@ -50,21 +50,44 @@ const Mbutton = ({ button, link, navigationLink, deleteProject }) => {
 
     return (
         <div className="border" onClick={handleNavigation}>
-            <a href={link} target="_blank" className="button group">
+            <a href={link} target="_blank" rel="noopener noreferrer" className="button group">
                 <span className="button-hover-bar"></span>
                 <span className="icon-right">
-                    <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    <svg
+                        className="icon"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        ></path>
                     </svg>
                 </span>
                 <span className="icon-left">
-                    <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    <svg
+                        className="icon"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        ></path>
                     </svg>
                 </span>
                 <span className="button-text">{button}</span>
             </a>
         </div>
+
     )
 }
 
