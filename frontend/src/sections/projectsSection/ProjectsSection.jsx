@@ -21,7 +21,7 @@ const ProjectsSection = () => {
     const fetchProjects = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/getAllProjects`);
+        const response = await axios.get(`https://nikhilsaiportfolio-1.onrender.com/api/v1/getAllProjects`);
 
         if (response.status === 200) {
           const projects = response?.data?.data;

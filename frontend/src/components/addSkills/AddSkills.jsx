@@ -29,7 +29,7 @@ const AddSkills = () => {
             formData.append('image_url', newSkillImage);
 
             try {
-                const response = await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/addSkill`, formData, {
+                const response = await axios.post(`https://nikhilsaiportfolio-1.onrender.com/api/v1/addSkill`, formData, {
                     headers: {
                         'Authorization': 'bearer ' + token,
                         'Content-Type': 'multipart/form-data',
@@ -63,7 +63,7 @@ const AddSkills = () => {
     const handleDeleteSkill = async (id) => {
         setDeletingSkillId(id);
         try {
-            const response = await axios.delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/deleteSkill/${id}`, {
+            const response = await axios.delete(`https://nikhilsaiportfolio-1.onrender.com/api/v1/deleteSkill/${id}`, {
                 headers: {
                     "Authorization": "bearer " + token
                 }
@@ -91,7 +91,7 @@ const AddSkills = () => {
     useEffect(() => {
         const fetchSkills = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/getAllSkills`);
+                const response = await axios.get(`https://nikhilsaiportfolio-1.onrender.com/api/v1/getAllSkills`);
 
                 if (response.status !== 200) {
                     return toast.error('Something went wrong');

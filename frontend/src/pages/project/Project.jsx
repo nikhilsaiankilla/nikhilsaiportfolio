@@ -23,7 +23,7 @@ const Project = () => {
     setLoading(true);
     const fetchProject = async (projectId) => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/getProject/${projectId}`);
+        const response = await axios.get(`https://nikhilsaiportfolio-1.onrender.com/api/v1/getProject/${projectId}`);
 
         if (response.status === 404) {
           toast.error('project Not Found')

@@ -26,7 +26,7 @@ const Admin = () => {
         return toast.error('Please fill all the fields');
       }
 
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/auth/login`, {
+      const response = await axios.post(`https://nikhilsaiportfolio-1.onrender.com/api/v1/auth/login`, {
         email: email,
         password: password
       });

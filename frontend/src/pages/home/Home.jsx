@@ -16,7 +16,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/getAdmin`);
+        const response = await axios.get(`https://nikhilsaiportfolio-1.onrender.com/api/v1/getAdmin`);
 
         if (response.status !== 200) {
           return toast.error('something went wrong unable to fetch data');

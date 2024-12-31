@@ -33,7 +33,7 @@ const ContactSection = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/sendMessage`, sendData);
+      const response = await axios.post(`https://nikhilsaiportfolio-1.onrender.com/api/v1/sendMessage`, sendData);
 
       if (response.status !== 200) {
         return toast.error('something went wrong');

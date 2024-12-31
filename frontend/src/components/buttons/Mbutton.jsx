@@ -2,11 +2,14 @@ import { useNavigate } from 'react-router'
 import './style.scss'
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { removeProjectSlice } from '../../slicer/homeSlice/HomeSlice'
 
 const Mbutton = ({ button, link, navigationLink, deleteProject }) => {
     const navigate = useNavigate();
     const token = useSelector(state => state.auth.token);
+    const dispatch = useDispatch();
 
     const handleDeleteProject = async (id) => {
         if (!id) {
@@ -18,7 +21,7 @@ const Mbutton = ({ button, link, navigationLink, deleteProject }) => {
         if (deleteProjectFromDB) {
             const toastId = toast.loading('deleting please wait');
             try {
-                const response = await axios.delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/deleteProject/${id}`, {
+                const response = await axios.delete(`https://nikhilsaiportfolio-1.onrender.com/api/v1/deleteProject/${id}`, {
                     headers: {
                         "Authorization": "bearer " + token
                     }
@@ -28,6 +31,7 @@ const Mbutton = ({ button, link, navigationLink, deleteProject }) => {
                     toast.remove(toastId);
 
                     toast.success('project deleted successfully');
+                    dispatch(removeProjectSlice(id));
                     navigate('/admin/dashboard');
                 }
             } catch (error) {

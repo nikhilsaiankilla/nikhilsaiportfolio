@@ -24,15 +24,17 @@ function App() {
       />
       <BrowserRouter>
         <Routes>
+          {/* Main Layout with nested routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="blog/:blogId" element={<Blog />} />
             <Route path="project/:projectId" element={<Project />} />
             <Route path="*" element={<Error />} />
+
+            <Route path="admin/login" element={<Admin />} />
+            <Route path="admin/dashboard" element={<AdminDashboard />} />
+            <Route path="admin/newProject" element={<NewProjectPage />} />
           </Route>
-          <Route path="admin/login" element={<Admin />} />
-          <Route path="admin/dashboard" element={<AdminDashboard />} />
-          <Route path="admin/newProject" element={<NewProjectPage />} />
         </Routes>
       </BrowserRouter>
     </>

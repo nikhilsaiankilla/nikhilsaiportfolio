@@ -2,12 +2,13 @@ import { useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from 'react-hot-toast'
 
 import "./style.scss";
 import SkillsSelector from "../../components/skillsSelector/SkillsSelector";
 import { useNavigate } from "react-router-dom";
+import {addProjectsSlice} from '../../slicer/homeSlice/HomeSlice'
 
 const NewProjectPage = () => {
     const [name, setName] = useState("");
@@ -24,12 +25,12 @@ const NewProjectPage = () => {
 
     const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const postProjectToServer = async (formData) => {
         setLoading(true);
         try {
-            const response = await axios.post(
-                process.env.REACT_APP_BACKEND_BASE_URL + "/addProjects",
+            const response = await axios.post(`https://nikhilsaiportfolio-1.onrender.com/api/v1/addProjects`,
                 formData,
                 {
                     headers: {
@@ -51,7 +52,7 @@ const NewProjectPage = () => {
                 filePlaceholderRef.current.textContent = "No file chosen";
 
                 const id = response?.data?.data?.id;
-
+                dispatch(addProjectsSlice(response?.data?.data));
                 navigate(`/project/${id}`)
             }
         } catch (error) {

@@ -26,7 +26,7 @@ const AdminDashboard = () => {
 
   const handleUpdateAdminApi = async (formData) => {
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BACKEND_BASE_URL}/updateAdminData`, formData, {
+      const response = await axios.put(`https://nikhilsaiportfolio-1.onrender.com/api/v1/updateAdminData`, formData, {
         headers: {
           "Authorization": "bearer " + token,
           "Content-Type": "multipart/form-data",
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/getAdmin`);
+        const response = await axios.get(`https://nikhilsaiportfolio-1.onrender.com/api/v1/getAdmin`);
 
         if (response.status !== 200) {
           return toast.error('something went wrong unable to fetch data');
