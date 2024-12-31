@@ -2,6 +2,7 @@
   "name": "react_portfolio",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@emailjs/browser": "^3.12.1",
     "@reduxjs/toolkit": "^2.5.0",
