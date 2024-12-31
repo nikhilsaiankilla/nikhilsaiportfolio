@@ -42,6 +42,8 @@ const Project = () => {
     setLoading(false);
   }, [projectId])
 
+  console.log(loading);
+
   return (
     <div className='project-page'>
       <div className="thumbnail">

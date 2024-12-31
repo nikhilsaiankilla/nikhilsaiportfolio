@@ -32,7 +32,6 @@ const NavSlider = () => {
   ]
 
   const handleNavLinkClick = (section) => {
-    // Scroll to the section when a nav link is clicked
     scroll.scrollTo(section, {
       duration: 800,
       delay: 0,
