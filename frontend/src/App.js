@@ -46,7 +46,7 @@ function App() {
           },
         }}
       />
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home userData={userData} />} />
@@ -55,7 +55,7 @@ function App() {
             <Route path="about" element={<About userData={userData} />} />
             <Route path="*" element={<Error />} />
           </Route>
-          <Route path='/admin' element={<Layout />}>
+          <Route path="/admin" element={<Layout />}>
             <Route index element={<Admin />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="newProject" element={<NewProjectPage />} />
