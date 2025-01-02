@@ -57,8 +57,8 @@ function App() {
           </Route>
           <Route path='/admin' element={<Layout />}>
             <Route index element={<Admin />} />
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="newProject" element={<NewProjectPage />} />
+            <Route path="/dashboard" element={<AdminDashboard />} />
+            <Route path="/newProject" element={<NewProjectPage />} />
             <Route path="*" element={<Error />} />
           </Route>
         </Routes>
