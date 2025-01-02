@@ -59,6 +59,7 @@ function App() {
             <Route index element={<Admin />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="newProject" element={<NewProjectPage />} />
+            <Route path="*" element={<Error />} />
           </Route>
         </Routes>
       </BrowserRouter>
