@@ -161,7 +161,7 @@ const AddSkills = () => {
                     </div>
                 </div>
 
-                <div className="button" onClick={() => navigate('/admin/newProject')}>
+                <div className="button" onClick={() => navigate('/admin/upload/project')}>
                     add new project
                 </div>
             </div>
