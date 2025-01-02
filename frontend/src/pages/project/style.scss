@@ -186,32 +186,103 @@
             h4,
             h5,
             h6 {
-                font-size: 1.7rem;
-                font-weight: 600;
+                color: #333;
+                margin-bottom: 1rem;
+                line-height: 1.4;
+            }
 
-                @include medium-screen {
-                    font-size: 2rem;
-                }
+            h1 {
+                font-size: 2rem;
+                font-weight: bold;
+            }
 
-                @include medium-large-screen {
-                    font-size: 2.5rem;
+            h2 {
+                font-size: 1.8rem;
+                font-weight: bold;
+            }
+
+            h3 {
+                font-size: 1.6rem;
+                font-weight: bold;
+            }
+
+            h4 {
+                font-size: 1.4rem;
+                font-weight: bold;
+            }
+
+            h5 {
+                font-size: 1.2rem;
+                font-weight: bold;
+            }
+
+            h6 {
+                font-size: 1rem;
+                font-weight: bold;
+            }
+
+            p {
+                margin: 0.5rem 0;
+                line-height: 1.6;
+                color: white;
+            }
+
+            ul {
+                margin-left: 1.5rem;
+                list-style: disc;
+
+                li {
+                    margin-bottom: 0.5rem;
                 }
             }
 
-            p{
-                font-size: 1rem;
-                text-transform: capitalize;
+            ol {
+                margin-left: 1.5rem;
+                list-style: circle;
 
-                @include medium-screen{
+                li {
+                    margin-bottom: 0.5rem;
+                }
+            }
+
+            blockquote {
+                margin: 1rem 0;
+                padding: 0.5rem 1rem;
+                border-left: 4px solid #007bff;
+                background-color: #f1f8ff;
+                font-style: italic;
+            }
+
+            @media (max-width: 768px) {
+                h1 {
+                    font-size: 1.6rem;
+                }
+
+                h2 {
+                    font-size: 1.4rem;
+                }
+
+                h3 {
+                    font-size: 1.2rem;
+                }
+
+                h4 {
                     font-size: 1.1rem;
                 }
+
+                h5 {
+                    font-size: 1rem;
+                }
+
+                h6 {
+                    font-size: 0.9rem;
+                }
+
+                p {
+                    font-size: 0.9rem;
+                }
             }
 
-            a{
-                text-decoration: none;
-                color: yellow;
-                cursor: pointer;
-            }
         }
     }
 }
