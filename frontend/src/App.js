@@ -6,10 +6,36 @@ import Project from './pages/project/Project';
 import Admin from './pages/admin/Admin';
 import AdminDashboard from './pages/adminDashboard/AdminDashboard';
 import NewProjectPage from './pages/newProjectPage/NewProjectPage';
+import About from './pages/About/About';
 import Error from './pages/error/Error';
 import { Toaster } from 'react-hot-toast';
+import axios from 'axios'
+import toast from 'react-hot-toast'
+import { useEffect, useState } from 'react'
 
 function App() {
+
+  const [userData, setUserData] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://nikhilsaiportfolio-1.onrender.com/api/v1/getAdmin`);
+
+        if (response.status !== 200) {
+          return toast.error('something went wrong unable to fetch data');
+        }
+
+        setUserData(response?.data?.data[0])
+      } catch (error) {
+        console.log(error);
+        return toast.error('something went wrong unable to fetch data');
+      }
+    }
+    fetchData();
+  }, [])
+
+
   return (
     <>
       <Toaster
@@ -25,9 +51,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
+            <Route index element={<Home userData={userData}/>} />
             <Route path="blog/:blogId" element={<Blog />} />
             <Route path="project/:projectId" element={<Project />} />
+            <Route path="about" element={<About userData={userData}/>} />
             <Route path="*" element={<Error />} />
 
             <Route path="admin/login" element={<Admin />} />

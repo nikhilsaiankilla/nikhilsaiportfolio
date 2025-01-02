@@ -40,9 +40,9 @@ const ContactSection = () => {
       }
       
       toast.success('message sent successfully');
-      setEmail(null);
-      setName(null);
-      setMessage(null)
+      setEmail("");
+      setName("");
+      setMessage("")
     } catch (error) {
       console.log(error);
       toast.error('something went wrong');
