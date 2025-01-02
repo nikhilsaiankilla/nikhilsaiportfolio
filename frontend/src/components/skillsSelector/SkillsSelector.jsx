@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import './style.scss';
-import { useSelector } from "react-redux";
 
-const SkillsSelector = ({ onSkillSelect }) => {
+const SkillsSelector = ({ onSkillSelect , skills}) => {
   const [selectedSkills, setSelectedSkills] = useState([]);
-
-  const skills = useSelector(state => state.navSlider.skills);
 
   const toggleSkill = (skill, event) => {
     event.preventDefault();

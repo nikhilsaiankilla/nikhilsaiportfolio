@@ -38,6 +38,7 @@ const ContactSection = () => {
       if (response.status !== 200) {
         return toast.error('something went wrong');
       }
+      
       toast.success('message sent successfully');
       setEmail(null);
       setName(null);

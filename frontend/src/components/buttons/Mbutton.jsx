@@ -28,10 +28,10 @@ const Mbutton = ({ button, link, navigationLink, deleteProject }) => {
                 })
 
                 if (response.status === 200) {
+                    dispatch(removeProjectSlice(id));
                     toast.remove(toastId);
 
                     toast.success('project deleted successfully');
-                    dispatch(removeProjectSlice(id));
                     navigate('/admin/dashboard');
                 }
             } catch (error) {

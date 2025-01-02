@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
@@ -16,6 +16,7 @@ const NewProjectPage = () => {
     const [tagline, setTagline] = useState("");
     const [demo_url, setDemoUrl] = useState("");
     const [code_url, setCodeUrl] = useState("");
+    const [Sskills, setSskills] = useState([]);
     const [skills, setSkills] = useState([]);
     const [image, setImage] = useState(null);
     const filePlaceholderRef = useRef(null)
@@ -24,6 +25,7 @@ const NewProjectPage = () => {
     const [loading, setLoading] = useState(false);
 
     const token = useSelector((state) => state.auth.token);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -47,7 +49,7 @@ const NewProjectPage = () => {
                 setDemoUrl(null);
                 setCodeUrl(null);
                 setImage(null);
-                setSkills([]);
+                setSskills([]);
                 setStarProject(null);
                 filePlaceholderRef.current.textContent = "No file chosen";
 
@@ -87,7 +89,7 @@ const NewProjectPage = () => {
         formData.append("code_url", code_url);
         formData.append("image_url", image);
 
-        skills.forEach((skill, index) => {
+        Sskills.forEach((skill, index) => {
             formData.append(`skillIds`, skill);
         });
 
@@ -99,13 +101,27 @@ const NewProjectPage = () => {
     };
 
     const handleSkillSelect = (selectedSkills) => {
-        setSkills(selectedSkills);
+        setSskills(selectedSkills);
     };
 
     const handleClick = () => {
         setStarProject(!starProject);
     };
 
+    useEffect(() => {
+        const fetchSkills = async () => {
+            try {
+                const response = await axios.get('https://nikhilsaiportfolio-1.onrender.com/api/v1/getAllSkills');
+    
+                if(response.status === 200){
+                    setSkills(response?.data?.data);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchSkills();
+    },[]);
 
     return (
         <div className="new-project-page">
@@ -149,7 +165,7 @@ const NewProjectPage = () => {
                     />
                 </div>
 
-                <SkillsSelector onSkillSelect={handleSkillSelect} />
+                <SkillsSelector onSkillSelect={handleSkillSelect} skills={skills}/>
 
                 <div className="file-upload-container">
                     <div className="file-upload">

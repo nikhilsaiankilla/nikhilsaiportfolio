@@ -19,7 +19,7 @@ const HeroSection = ({ user }) => {
       </div>
       <div className="text-container">
         <h4>Hey I'm your</h4>
-        <h1>Software Developer</h1>
+        <h1>Full Stack Developer</h1>
         <a href={user?.profile_resume} className='download-pdf'>view My Resume</a>
       </div>
       <div className="icon-container">

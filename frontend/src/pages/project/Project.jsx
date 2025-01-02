@@ -52,43 +52,45 @@ const Project = () => {
           alt={data?.name}
           src={data?.image_url}
           wrapperProps={{
-            style: {transitionDelay: "1s"},
-        }}
+            style: { transitionDelay: "1s" },
+          }}
         />
       </div>
-      <div className='project-info'>
-        <h1 className="title">{data?.name}</h1>
-        <h6 className="tagline">{data?.tagline}</h6>
-        <div className='btn-container'>
-          <div className='btns'>
-            <Mbutton button={"Demo"} link={data?.demo_url} />
-            <Mbutton button={"Code"} link={data?.code_url} />
-          </div>
-          {
-            token && <div className='btns'>
-              <Mbutton button={"Edit"}  />
-              <Mbutton button={"Delete"} deleteProject={projectId}/>
+      {
+        loading ? "Loading please wait" : <div className='project-info'>
+          <h1 className="title">{data?.name}</h1>
+          <h6 className="tagline">{data?.tagline}</h6>
+          <div className='btn-container'>
+            <div className='btns'>
+              <Mbutton button={"Demo"} link={data?.demo_url} />
+              <Mbutton button={"Code"} link={data?.code_url} />
             </div>
-          }
-        </div>
-        <div className="skills">
-          <h4>Technologies used in Project</h4>
-          <div className="skills-container">
             {
-              data?.Skills?.map(skill => (<div className="skill" key={skill?.id}>
-                <img src={skill?.image_url} alt={skill?.name} className="skill-image" />
-                <div className="skill-details">
-                  <p className="skill-name">{skill?.name}</p>
-                </div>
-              </div>))
+              token && <div className='btns'>
+                <Mbutton button={"Edit"} />
+                <Mbutton button={"Delete"} deleteProject={projectId} />
+              </div>
             }
           </div>
+          <div className="skills">
+            <h4>Technologies used in Project</h4>
+            <div className="skills-container">
+              {
+                data?.Skills?.map(skill => (<div className="skill" key={skill?.id}>
+                  <img src={skill?.image_url} alt={skill?.name} className="skill-image" />
+                  <div className="skill-details">
+                    <p className="skill-name">{skill?.name}</p>
+                  </div>
+                </div>))
+              }
+            </div>
+          </div>
+          <div
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.description || '') }}
+            className="desc"
+          />
         </div>
-        <div
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.description || '') }}
-          className="desc"
-        />
-      </div>
+      }
     </div>
   )
 }

@@ -17,7 +17,8 @@ const SkillsSection = () => {
       const response = await axios.get('https://nikhilsaiportfolio-1.onrender.com/api/v1/getAllSkills');
 
       if (response.status === 200) {
-        dispatch(setSkills(response?.data?.data));
+        const skills = response?.data?.data;
+        dispatch(setSkills(skills));
       }
     }
     fetchSkills();

@@ -24,7 +24,6 @@ function App() {
       />
       <BrowserRouter>
         <Routes>
-          {/* Main Layout with nested routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="blog/:blogId" element={<Blog />} />
