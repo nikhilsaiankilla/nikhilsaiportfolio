@@ -175,114 +175,59 @@
         }
 
         .desc {
-            width: 100%;
-            margin-top: 20px;
-
-            gap: 1rem;
-
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6 {
-                color: #333;
-                margin-bottom: 1rem;
-                line-height: 1.4;
-            }
-
-            h1 {
-                font-size: 2rem;
-                font-weight: bold;
-            }
-
-            h2 {
-                font-size: 1.8rem;
-                font-weight: bold;
-            }
-
-            h3 {
-                font-size: 1.6rem;
-                font-weight: bold;
-            }
-
-            h4 {
-                font-size: 1.4rem;
-                font-weight: bold;
-            }
-
-            h5 {
-                font-size: 1.2rem;
-                font-weight: bold;
-            }
-
-            h6 {
-                font-size: 1rem;
-                font-weight: bold;
-            }
-
+            color: #f0f0f0;
+            line-height: 1.6;
+            font-size: 1rem;
+            margin-top: 2.5rem;
+          
             p {
-                margin: 0.5rem 0;
-                line-height: 1.6;
-                color: white;
+              color: #ffffff;
             }
-
+          
+            strong {
+              font-weight: bold;
+              color: #cccccc;
+            }
+          
+            h3 {
+              font-size: 1.5rem;
+              color: #ffffff;
+            }
+          
             ul {
-                margin-left: 1.5rem;
-                list-style: disc;
-
-                li {
-                    margin-bottom: 0.5rem;
+              margin-left: 1rem;
+              list-style: disc;
+          
+              li {
+                margin: 5px 0;
+                color: #dddddd;
+          
+                strong {
+                  color: #ffffff;
                 }
+              }
             }
-
-            ol {
-                margin-left: 1.5rem;
-                list-style: circle;
-
-                li {
-                    margin-bottom: 0.5rem;
-                }
+          
+            a {
+              color: #1e90ff;
+              text-decoration: none;
+          
+              &:hover {
+                text-decoration: underline;
+              }
             }
-
-            blockquote {
-                margin: 1rem 0;
-                padding: 0.5rem 1rem;
-                border-left: 4px solid #007bff;
-                background-color: #f1f8ff;
-                font-style: italic;
-            }
-
+          
             @media (max-width: 768px) {
-                h1 {
-                    font-size: 1.6rem;
-                }
-
-                h2 {
-                    font-size: 1.4rem;
-                }
-
-                h3 {
-                    font-size: 1.2rem;
-                }
-
-                h4 {
-                    font-size: 1.1rem;
-                }
-
-                h5 {
-                    font-size: 1rem;
-                }
-
-                h6 {
-                    font-size: 0.9rem;
-                }
-
-                p {
-                    font-size: 0.9rem;
-                }
+              font-size: 0.9rem;
+          
+              h3 {
+                font-size: 1.2rem;
+              }
+          
+              ul {
+                margin-left: 1rem;
+              }
             }
-
-        }
+          }
     }
 }

@@ -31,11 +31,18 @@ const ProjectsSection = () => {
         console.log(error);
         toast.error('something went wrong');
       }
-      setLoading(false);
+      setLoading(false); 
     }
 
     fetchProjects();
   }, [dispatch])
+
+  const sortedProjects = [...projects]?.sort((a, b) => {
+    if (a.star && !b.star) return -1; 
+    if (!a.star && b.star) return 1; 
+    return 0;
+  });
+  
 
   return (
     <div className='project-section' id='ProjectsSection'>
@@ -43,12 +50,26 @@ const ProjectsSection = () => {
 
       <div className="project-container">
         {
-          loading ? "Fetching Projects Please Wait" : projects.length > 0 ? projects.map(p => {
+          loading ? (
+            <div className='skeleton-container'>
+              <div className="skeleton-loader">
+                <div className="image-skeleton" />
+                <div className="info-skeleton" />
+              </div>
+              <div className="skeleton-loader">
+                <div className="image-skeleton" />
+                <div className="info-skeleton" />
+              </div>
+              <div className="skeleton-loader">
+                <div className="image-skeleton" />
+                <div className="info-skeleton" />
+              </div>
+            </div>
+          ) : sortedProjects?.length > 0 ? sortedProjects.map(p => {
             return (<Project project={p} key={p?.id} />)
           }) : "No Projects Found"
         }
       </div>
-
     </div>
   )
 }

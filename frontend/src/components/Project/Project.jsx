@@ -35,7 +35,7 @@ const Project = ({ project }) => {
             </div>
             <div className="info">
                 <h2 className="title">{project?.name}</h2>
-                <p>{trimTextToLength(project?.tagline, 140) + "..."}</p>
+                <p>{trimTextToLength(project?.tagline, 40) + "..."}</p>
 
                 <div className="buttons">
                     <Button title="view project" link={project?.demo_url} />

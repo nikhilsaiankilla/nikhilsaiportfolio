@@ -9,12 +9,11 @@ import NewProjectPage from './pages/newProjectPage/NewProjectPage';
 import About from './pages/About/About';
 import Error from './pages/error/Error';
 import { Toaster } from 'react-hot-toast';
-import axios from 'axios'
-import toast from 'react-hot-toast'
-import { useEffect, useState } from 'react'
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useEffect, useState } from 'react';
 
 function App() {
-
   const [userData, setUserData] = useState();
 
   useEffect(() => {
@@ -23,18 +22,17 @@ function App() {
         const response = await axios.get(`https://nikhilsaiportfolio-1.onrender.com/api/v1/getAdmin`);
 
         if (response.status !== 200) {
-          return toast.error('something went wrong unable to fetch data');
+          return toast.error('Something went wrong. Unable to fetch data');
         }
 
-        setUserData(response?.data?.data[0])
+        setUserData(response?.data?.data[0]);
       } catch (error) {
         console.log(error);
-        return toast.error('something went wrong unable to fetch data');
+        return toast.error('Something went wrong. Unable to fetch data');
       }
-    }
+    };
     fetchData();
-  }, [])
-
+  }, []);
 
   return (
     <>
@@ -51,15 +49,16 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home userData={userData}/>} />
+            <Route index element={<Home userData={userData} />} />
             <Route path="blog/:blogId" element={<Blog />} />
             <Route path="project/:projectId" element={<Project />} />
-            <Route path="about" element={<About userData={userData}/>} />
+            <Route path="about" element={<About userData={userData} />} />
             <Route path="*" element={<Error />} />
-
-            <Route path="admin/login" element={<Admin />} />
-            <Route path="admin/dashboard" element={<AdminDashboard />} />
-            <Route path="admin/newProject" element={<NewProjectPage />} />
+          </Route>
+          <Route path='/admin' element={<Layout />}>
+            <Route index element={<Admin />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="newProject" element={<NewProjectPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
