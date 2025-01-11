@@ -33,7 +33,7 @@ app.use(bodyParser.json());
         await sequelize.sync({ alter: true });
         console.log('Database synced'.magenta);
     } catch (err) {
-        console.error('Database connection failed:', err.red);
+        console.error('Database connection failed:', err);
         process.exit(1);
     }
 })();
