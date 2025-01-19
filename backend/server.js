@@ -28,7 +28,7 @@ app.use(trackUsersMiddleware);
         await sequelize.authenticate();
         console.log('Database connected successfully'.green);
         defineAssociations();
-        await sequelize.sync({ alter: true });
+        await sequelize.sync({ alter: false });
         console.log('Database synced'.magenta);
     } catch (err) {
         console.error('Database connection failed:', err);

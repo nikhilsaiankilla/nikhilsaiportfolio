@@ -8,8 +8,6 @@ const trackUsersMiddleware = async (req, res, next) => {
         endpoint: req.originalUrl,
         timestamp: new Date().toISOString(),
     };
-    console.log(`User Activity:`, requestData);
-
     try {
         await UserActivity.create(requestData);
     } catch (e) {
