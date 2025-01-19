@@ -28,24 +28,25 @@ const SkillsPage = () => {
     { name: "CSS", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQITV1JMSFvp7hF8bNDJk_uDnCwmnU-D-ufbQ&s" },
   ]
   return (
-    <section className='w-[97%] h-[94%] bg-[#C1BAB0] m-5 p-6 md:p-8 lg:p-12 xl:p-16 border-2 border-[#1C1C19] overflow-y-scroll scrollbar-custom scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent' >
+    <section className='w-[97%] h-[94%] bg-[#C1BAB0] m-1 lg:m-5 p-3 md:p-8 lg:p-12 xl:p-16 border-2 border-[#1C1C19] overflow-y-scroll scrollbar-custom scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent texture' >
       <PageTitle title="my Skills" />
-      <div className='w-full bg-red-600 rounded-xl mt-3 lg:mt-6 flex items-center justify-center lg:items-start lg:justify-center gap-4 lg:gap-6 py-4 flex-wrap'>
+      <div className="w-full texture mt-3 lg:mt-6 gap-4 py-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
         {
           skills?.map(skill => (
-            <div className='w-32 h-40 lg:w-48 lg:h-52 flex items-center justify-center flex-col gap-2 StyledReceipt'>
-              <div className='w-full h-36'>
+            <div className="w-32 h-40 lg:w-48 lg:h-52 flex items-center justify-center flex-col gap-2 my-1 SmallStyledReceipt">
+              <div className="w-full h-40">
                 <img
                   src={skill?.image}
                   alt={skill?.name}
-                  className='w-full h-full object-contain'
+                  className="w-full h-full object-contain"
                 />
               </div>
-              <h4 className='text-xl font-bold'>{skill?.name}</h4>
+              <h4 className="text-xl md:text-2xl font-bold text-[#1a1a1a] navLinksStyle">{skill?.name}</h4>
             </div>
           ))
         }
       </div>
+
     </section>
   )
 }

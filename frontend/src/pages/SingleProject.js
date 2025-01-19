@@ -2,7 +2,7 @@ import Button from './../components/Button';
 
 const SingleProject = () => {
   return (
-    <section className='w-full h-full rounded-md bg-[#FA812F] p-2 sm:p-4 md:p-6 lg:p-8 overflow-y-scroll scrollbar-custom scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent'>
+    <section className='w-[97%] h-[94%] bg-[#C1BAB0] m-1 lg:m-5 p-6 md:p-8 lg:p-12 border-2 border-[#1C1C19] overflow-y-scroll scrollbar-custom scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent texture'>
       <div className='w-full h-screen md:h-2/3 rounded-lg overflow-hidden'>
         <img
           src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpu-FlGMi8tIw7zLxcOX2RxsAyaQC_OR2Bxg&s'

@@ -6,8 +6,8 @@ import Button from "../components/Button";
 
 const HomePage = () => {
   return (
-      <section className='w-[97%] h-[94%] bg-[#C1BAB0] m-5 p-6 md:p-8 lg:p-12 xl:p-16 flex items-start justify-center flex-col border-2 border-[#1C1C19]'>
-        <h1 className='text-3xl font-bold md:font-extrabold sm:text-5xl lg:text-6xl xl:text-7xl text-[#1C1C19]'>Hey I'm <br /> Nikhil Sai Ankilla, <br /> Software Developer Engineer, <br /> based in Hyd.</h1>
+      <section className='w-[97%] h-[94%] bg-[#e0c9a6] m-1 lg:m-5 p-6 md:p-8 lg:p-12 xl:p-16 flex items-start justify-center flex-col border-2 border-[#1C1C19] texture'>
+        <h1 className='text-3xl font-bold md:font-extrabold sm:text-5xl lg:text-6xl xl:text-7xl text-[#1C1C19] pageTitle'>Hey I'm <br /> Nikhil Sai Ankilla, <br /> Software Developer Engineer, <br /> based in Hyd.</h1>
         <div className="flex gap-4 mt-5 md:mt-8 ">
           <span>
             <FaLinkedin className="text-xl md:text-3xl font-bold cursor-pointer text-[#1C1C19]"/>
