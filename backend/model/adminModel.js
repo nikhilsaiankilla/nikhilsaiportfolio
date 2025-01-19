@@ -6,7 +6,7 @@ const MyData = sequelize.define('MyData', {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
     },
     name: {
         type: DataTypes.STRING,
@@ -15,7 +15,7 @@ const MyData = sequelize.define('MyData', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: true, // Keep only essential unique constraints
     },
     password: {
         type: DataTypes.STRING,
@@ -50,16 +50,17 @@ const MyData = sequelize.define('MyData', {
     },
     created_at: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,  
+        defaultValue: DataTypes.NOW,
     },
     updated_at: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,  
-        onUpdate: DataTypes.NOW,  
+        defaultValue: DataTypes.NOW,
+        onUpdate: DataTypes.NOW,
     },
 }, {
     tableName: 'my_data',
-    timestamps: false, 
+    timestamps: false,
+    indexes: [],
 });
 
 module.exports = { MyData };
