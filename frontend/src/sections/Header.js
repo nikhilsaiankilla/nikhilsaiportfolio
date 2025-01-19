@@ -44,7 +44,7 @@ const Header = ({ onActivePageChange }) => {
             </div>
           </nav>
 
-          <nav className='w-full pb-6'>
+          <nav className='w-full pb-3 mt-2'>
             <ul className='w-full flex items-center justify-center flex-col gap-3'>
               <NavLink to='/' className={`text-xl navLinksStyle ${selectedLink === "Home" ? "font-bold" : "font-medium"}  cursor-pointer`} onClick={() => handleNavLinkSelector("Home")}>Home</NavLink>
               <NavLink to='/about' className={`text-xl navLinksStyle ${selectedLink === "About" ? "font-bold" : "font-medium"} cursor-pointer`} onClick={() => handleNavLinkSelector("About")}>About</NavLink>

@@ -1,5 +1,6 @@
-import PageTitle from './../components/PageTitle'
-import Button from './../components/Button'
+import PageTitle from './../components/PageTitle';
+import Button from './../components/Button';
+import { FaArrowRight } from 'react-icons/fa';
 
 const AboutPage = () => {
   return (
@@ -44,7 +45,7 @@ const AboutPage = () => {
           support.
         </p>
 
-        <Button title="know more about me"/>
+        <Button title="know more about me" icon={<FaArrowRight />} />
       </div>
     </section>
   )

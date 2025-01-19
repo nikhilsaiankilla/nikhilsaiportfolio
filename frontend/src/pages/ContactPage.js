@@ -57,27 +57,26 @@ const ContactPage = () => {
           </textarea>
           <button
             type='submit'
-            className='w-fit px-10 py-2 text-lg font-medium border-0 outline-none bg-red-200 cursor-pointer navLinksStyle'
-          >
+            className={`w-fit px-10 py-2 border-2 border-black bg-[#FEF3E2] text-black hover:bg-black hover:text-white focus:ring-[#FEF3E2] font-semibold text-md md:text-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 active:scale-95 flex items-center justify-center gap-2 navLinksStyle`}>
             Submit
           </button>
         </form>
 
         <div className="flex gap-4 mt-5 md:mt-8 ">
           <span>
-            <FaLinkedin className="text-xl md:text-3xl font-bold cursor-pointer text-black" />
+            <FaLinkedin className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
           </span>
           <span>
-            <SiLeetcode className="text-xl md:text-3xl font-bold cursor-pointer text-black" />
+            <SiLeetcode className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
           </span>
           <span>
-            <FaInstagram className="text-xl md:text-3xl font-bold cursor-pointer text-black" />
+            <FaInstagram className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
           </span>
           <span>
-            <FaXTwitter className="text-xl md:text-3xl font-bold cursor-pointer text-black" />
+            <FaXTwitter className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
           </span>
           <span>
-            <FaGithub className="text-xl md:text-3xl font-bold cursor-pointer text-black" />
+            <FaGithub className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
           </span>
         </div>
 
