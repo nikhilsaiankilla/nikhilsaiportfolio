@@ -1,11 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FaGithub, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { SiLeetcode } from 'react-icons/si';
 import { FaXTwitter } from 'react-icons/fa6';
 import PageTitle from './../components/PageTitle';
+import axios from 'axios';
 
 const ContactPage = () => {
-  const handleSubmit = useCallback((e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = {
@@ -13,10 +16,28 @@ const ContactPage = () => {
       email: formData.get('email'),
       message: formData.get('message'),
     };
-
-    console.log('Form Submitted:', data);
-    e.target.reset(); // Clear the input fields after submission
+    await sendMessage(data);
+    e.target.reset();
   }, []);
+
+  const sendMessage = async (data) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(`https://nikhilsaiportfolio-1.onrender.com/api/v1/sendMessage`, data);
+
+      if (response.status !== 200) {
+        return alert('something went wrong')
+      }
+
+      if (response.status === 200) {
+        alert("msg sent successfully")
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <section className='w-[97%] h-[94%] bg-[#C1BAB0] m-1 lg:m-5 p-4 md:p-8 lg:p-12 xl:p-16 border-2 border-[#1C1C19] overflow-y-scroll scrollbar-custom scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent texture'>
@@ -58,7 +79,9 @@ const ContactPage = () => {
           <button
             type='submit'
             className={`w-fit px-10 py-2 border-2 border-black bg-[#FEF3E2] text-black hover:bg-black hover:text-white focus:ring-[#FEF3E2] font-semibold text-md md:text-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 active:scale-95 flex items-center justify-center gap-2 navLinksStyle`}>
-            Submit
+            {
+              loading ? "sending..." : "Submit"
+            }
           </button>
         </form>
 

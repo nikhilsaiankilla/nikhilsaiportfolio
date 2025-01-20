@@ -113,12 +113,6 @@
     text-decoration: underline;
     color: blueviolet;
 }
-
-/* #C1BAB0 --> bg color  */
-/* 1C1C19 --> another bg color  */
-/* 806657 --> darkbg-color */
-/* #cc9c80 --> another light color  */
-
 /* add this class to get the paper zig zag  */
 .StyledReceipt {
     background-color: rgba(128, 102, 87, 0.799);
@@ -206,9 +200,25 @@
     font-family: "Amarante", serif;
     font-weight: 400;
     font-style: normal;
-  }
-  
+}
+
 .navLinksStyle {
     font-family: "Amarante", serif;
+}
+
+.text-custom {
+    font-size: 0.875rem; 
+    font-size: 1.25rem;
+    font-weight: 500; 
+    line-height: 1.25; 
+    word-wrap: break-word; 
+    color: #f4f4f4; 
+    font-family: "Amarante", serif;
+  }
+  
+  @media (min-width: 768px) {
+    .text-custom {
+      font-size: 1.25rem; 
+    }
   }
   
