@@ -1,29 +1,20 @@
 {
-  "name": "react_portfolio",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./",
   "dependencies": {
-    "@emailjs/browser": "^3.12.1",
     "@reduxjs/toolkit": "^2.5.0",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.9",
+    "cra-template": "1.2.0",
     "dompurify": "^3.2.3",
-    "quill": "^2.0.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hot-toast": "^2.4.1",
-    "react-icons": "^4.12.0",
-    "react-lazy-load-image-component": "^1.6.0",
-    "react-quill": "^2.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.4.0",
+    "react-lazy-load-image-component": "^1.6.3",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^6.28.1",
-    "react-scripts": "^5.0.1",
-    "react-scroll": "^1.9.0",
-    "sass": "^1.69.6",
-    "web-vitals": "^2.1.4"
+    "react-router-dom": "^7.1.2",
+    "react-scripts": "5.0.1",
+    "tailwind-scrollbar": "^3.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,6 +41,8 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17"
   }
 }

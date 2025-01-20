@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Amarante&display=swap');
+
+@layer utilities {
+    .scrollbar-custom {
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f4f4f4;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-track {
+        background-color: #f4f4f4;
+    }
+}
+
+.scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+    /* Thumb color and transparent track */
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+    background: transparent;
+    /* Transparent track */
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Thumb color */
+    border-radius: 10px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-button {
+    display: none;
+    /* Hides the scrollbar arrows */
+}
+
+.custom-underline {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-desc h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.project-desc h2 {
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.project-desc h3,
+.project-desc h4,
+.project-desc h5,
+.project-desc h6 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1;
+}
+
+.project-desc p {
+    font-size: 1rem;
+    font-weight: normal;
+    line-height: 1;
+}
+
+.project-desc ul {
+    list-style: disc;
+}
+
+.project-desc ul li {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.project-desc ul li p {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.project-desc ul p {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.project-desc ol li {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.project-desc a {
+    text-decoration: underline;
+    color: blueviolet;
+}
+/* add this class to get the paper zig zag  */
+.StyledReceipt {
+    background-color: rgba(128, 102, 87, 0.799);
+    position: relative;
+    box-shadow: 0 -0.4rem 1rem -0.4rem rgba(0, 0, 0, 0.2);
+}
+
+.StyledReceipt::before,
+.StyledReceipt::after {
+    background-image: linear-gradient(135deg, rgba(128, 102, 87, 0.799) 0.5rem, transparent 0),
+        linear-gradient(-135deg, rgba(128, 102, 87, 0.799) 0.5rem, transparent 0);
+    background-repeat: repeat-x;
+    background-size: 1rem;
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 1rem;
+}
+
+.StyledReceipt::before {
+    top: -1rem;
+    left: 0;
+    background-position: left-top;
+    transform: rotate(180deg);
+}
+
+.StyledReceipt::after {
+    bottom: -1rem;
+    left: 0;
+    background-position: left-bottom;
+}
+
+/* small paper zig zag cut  */
+.SmallStyledReceipt {
+    background-color: #a6a096;
+    position: relative;
+    box-shadow: 0 -0.4rem 1rem -0.4rem rgba(0, 0, 0, 0.2);
+}
+
+.SmallStyledReceipt::before,
+.SmallStyledReceipt::after {
+    background-image: linear-gradient(135deg, #a6a096 0.25rem, transparent 0),
+        linear-gradient(-135deg, #a6a096 0.25rem, transparent 0);
+    background-repeat: repeat-x;
+    background-size: .5rem;
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 1rem;
+}
+
+.SmallStyledReceipt::before {
+    top: -1rem;
+    left: 0;
+    background-position: left-top;
+    transform: rotate(180deg);
+}
+
+.SmallStyledReceipt::after {
+    bottom: -1rem;
+    left: 0;
+    background-position: left-bottom;
+}
+
+.texture {
+    background-color: rgba(224, 201, 166, 0.604);
+    background-image: url("https://www.transparenttextures.com/patterns/textured-paper.png");
+    background-blend-mode: multiply;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.texture-p {
+    background-color: rgba(128, 102, 87, 0.799);
+    background-image: url("https://www.transparenttextures.com/patterns/textured-paper.png");
+    background-blend-mode: multiply;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* page heading font  */
+.pageTitle {
+    font-family: "Amarante", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.navLinksStyle {
+    font-family: "Amarante", serif;
+}
+
+.text-custom {
+    font-size: 0.875rem; 
+    font-size: 1.25rem;
+    font-weight: 500; 
+    line-height: 1.25; 
+    word-wrap: break-word; 
+    color: #f4f4f4; 
+    font-family: "Amarante", serif;
+  }
+  
+  @media (min-width: 768px) {
+    .text-custom {
+      font-size: 1.25rem; 
+    }
+  }
+  
