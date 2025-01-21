@@ -44,8 +44,8 @@ const HomePage = () => {
       </div>
 
       <div className="flex gap-2 mt-4 md:mt-8 flex-wrap">
-        <Button title="Download Resume" link={about?.profile_resume} icon={<FaDownload />} theme={true}/>
-        <Button title="About Me" link="/about" icon={<FaArrowRight />} theme={true} newPage={true}/>
+        <Button title="Download Resume" link={about?.profile_resume} icon={<FaDownload />} theme={true} />
+        <Button title="About Me" link="/about" icon={<FaArrowRight />} theme={true} newPage={true} />
       </div>
     </section>
   )
