@@ -79,13 +79,13 @@ const SingleProject = () => {
             (
               <section className='w-[97%] h-[94%] bg-[#C1BAB0] m-1 lg:m-5 p-6 md:p-8 lg:p-12 border-2 border-[#1C1C19] overflow-y-scroll scrollbar-custom scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent texture'>
                 <PageTitle title={singleProject?.name} />
-                <div className='w-full h-[200px] md:h-96 p-2 lg:p-4 border-2 border-[#1a1a1a]'>
-                  <div className='w-full h-full overflow-hidden'>
+                <div className='w-full lg:w-[80%] p-2 lg:p-4 border-2 m-auto border-[#1a1a1a]'>
+                  <div className='w-full'>
                     <LazyLoadImage
                       effect="blur"
                       alt={singleProject?.name + " Thumbnail"}
                       src={singleProject?.image_url}
-                      className='w-full h-full object-cover hover:scale-105 transition-all duration-200 ease-in'
+                      className='w-full h-full object-cover'
                       wrapperProps={{
                         style: { transitionDelay: "1s" },
                       }}
@@ -101,10 +101,10 @@ const SingleProject = () => {
                       <Button title="Demo" link={singleProject?.demo_url} />
                       <Button title="Code" link={singleProject?.code_url} />
                     </div>
-                    <div className='w-full md:w-[48%] flex items-end justify-between md:justify-end gap-5'>
+                    {/* <div className='w-full md:w-[48%] flex items-end justify-between md:justify-end gap-5'>
                       <Button title="edit" />
                       <Button title="delete" />
-                    </div>
+                    </div> */}
                   </div>
 
                   <div

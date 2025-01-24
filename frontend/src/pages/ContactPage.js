@@ -4,6 +4,8 @@ import { SiLeetcode } from 'react-icons/si';
 import { FaXTwitter } from 'react-icons/fa6';
 import PageTitle from './../components/PageTitle';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ContactPage = () => {
   const [loading, setLoading] = useState(false);
@@ -11,11 +13,17 @@ const ContactPage = () => {
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+
     const data = {
       name: formData.get('name'),
       email: formData.get('email'),
       message: formData.get('message'),
     };
+
+    if (!data.email || !data.message || !data.name) {
+      return toast.error('all fields required')
+    }
+
     await sendMessage(data);
     e.target.reset();
   }, []);
@@ -26,14 +34,15 @@ const ContactPage = () => {
       const response = await axios.post(`https://nikhilsaiportfolio-1.onrender.com/api/v1/sendMessage`, data);
 
       if (response.status !== 200) {
-        return alert('something went wrong')
+        return toast.error('something went wrong.')
       }
 
       if (response.status === 200) {
-        alert("msg sent successfully")
+        toast.success('sent successfully.')
       }
     } catch (error) {
       console.log(error);
+      toast.error('something went wrong.')
     } finally {
       setLoading(false);
     }
@@ -86,23 +95,21 @@ const ContactPage = () => {
         </form>
 
         <div className="flex gap-4 mt-5 md:mt-8 ">
-          <span>
+          <NavLink to='https://www.linkedin.com/in/nikhilsaiankilla/' target='_blank'>
             <FaLinkedin className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
-          </span>
-          <span>
+          </NavLink>
+          <NavLink to='https://leetcode.com/u/nikhilsai24/' target='_blank'>
             <SiLeetcode className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
-          </span>
-          <span>
-            <FaInstagram className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
-          </span>
-          <span>
+          </NavLink>
+          <NavLink to='https://x.com/NikhilsaiAnkil1' target='_blank'>
             <FaXTwitter className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
-          </span>
-          <span>
+          </NavLink>
+          <NavLink to='https://github.com/nikhilsaiankilla' target='_blank'>
             <FaGithub className="text-xl md:text-3xl font-bold cursor-pointer text-[#e0c9a6dc]" />
-          </span>
+          </NavLink>
         </div>
 
+        <p className='mt-3 text-white font-bold'>nikhilsaiankilla@gmail.com</p>
       </div>
     </section>
   );
